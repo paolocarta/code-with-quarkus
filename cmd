@@ -1,0 +1,1 @@
+./mvnw package -Dquarkus.container-image.build=true
