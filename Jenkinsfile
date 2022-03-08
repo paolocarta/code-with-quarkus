@@ -80,7 +80,7 @@ stages {
 
     stage('Image Build') {
 
-        agent { label 'buildah' }
+        agent { label 'buildah-x86' }
 
         // when {
         //     // fake condition for now
@@ -93,110 +93,29 @@ stages {
         }
     }
 
-    // stage('Push Docker Image') {
-    //     when {
-    //         branch 'master'
-    //     }
+    stage('Push Docker Image') {
+        // when {
+        //     branch 'master'
+        // }
         
-    //     steps {
-    //         script {
+        steps {
+            
+            script {
 
-    //         }
-    //     }
-    // }
+            }
+        }
+    }
 
-    // stage('Update GitOps Repo') {
-    //     when {
-    //         branch 'master'
-    //     }
+    stage('Update GitOps Repo') {
         
-    //     steps {
- 
-    //     }
-    // }
-
-    
-
-    // stage ('Verify Deployment to Dev') {
-    //   steps {
-    //     script {
-    //       openshift.withCluster() {
-    //         def dcObj = openshift.selector('dc', env.APP_NAME).object()
-    //         def podSelector = openshift.selector('pod', [deployment: "${APP_NAME}-${dcObj.status.latestVersion}"])
-    //         podSelector.untilEach {
-    //             echo "pod: ${it.name()}"
-    //             return it.object().status.containerStatuses[0].ready
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-
-    // stage('Promote to Stage') {
-    //   steps {
-    //     script {
-    //       openshift.withCluster() {
-    //         openshift.tag("${env.STAGE1}/${env.APP_NAME}:latest", "${env.STAGE2}/${env.APP_NAME}:latest")
-    //       }
-    //     }
-    //   }
-    // }
-
-    // stage ('Verify Deployment to Stage') {
-    //   steps {
-    //     script {
-    //       openshift.withCluster() {
-    //           openshift.withProject("${STAGE2}") {
-    //           def dcObj = openshift.selector('dc', env.APP_NAME).object()
-    //           def podSelector = openshift.selector('pod', [deployment: "${APP_NAME}-${dcObj.status.latestVersion}"])
-    //           podSelector.untilEach {
-    //               echo "pod: ${it.name()}"
-    //               return it.object().status.containerStatuses[0].ready
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-
-    // stage('Promote to Prod') {
-    //   steps {
-    //     withDockerRegistry([credentialsId: "${STAGE1}-nonprod-credentials", url: "${SRC_API_URL}"]) {
-
-    //       withDockerRegistry([credentialsId: "${STAGE1}-prod-credentials", url: "${DEST_API_URL}"]) {
-
-    //         sh """
-    //             oc image mirror --insecure=true ${SRC_REGISTRY}/${STAGE2}/${APP_NAME}:latest ${DEST_REGISTRY}/${STAGE3}/${APP_NAME}:latest 
-    //           """
-
-    //         }
-    //       }
-    //     }
-    //   }
-
-    // stage ('Verify Deployment to Prod') {
-    //   steps {
-    //     script {
-    //       openshift.withCluster() {
-    //         def secretData = openshift.selector('secret/prod-cluster-credentials').object().data
-    //         def encodedAPI = secretData.api
-    //         def encodedToken = secretData.token
-    //         env.API = sh(script:"set +x; echo ${encodedAPI} | base64 --decode", returnStdout: true).replaceAll(/https?/, 'insecure')
-    //         env.TOKEN = sh(script:"set +x; echo ${encodedToken} | base64 --decode", returnStdout: true)
-    //       }
-    //       openshift.withCluster( env.API, env.TOKEN ) {
-    //         openshift.withProject("${STAGE3}") {
-    //           def dcObj = openshift.selector('dc', env.APP_NAME).object()
-    //           def podSelector = openshift.selector('pod', [deployment: "${APP_NAME}-${dcObj.status.latestVersion}"])
-    //           podSelector.untilEach {
-    //               echo "pod: ${it.name()}"
-    //               return it.object().status.containerStatuses[0].ready
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
+        // when {
+        //     branch 'master'
+        // }
+        
+        steps {
+            
+        }
+    }
 
   }
 
