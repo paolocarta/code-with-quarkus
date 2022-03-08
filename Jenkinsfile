@@ -9,8 +9,10 @@ pipeline {
         string(defaultValue: "http://baifuseqa01.internal.com/nexus", description: 'Nexus URL', name: 'NEXUS_URL')
         string(defaultValue: "artifacts", description: 'Nexus hosted repo name', name: 'NEXUS_HOSTED_NAME_RELEASES')
         string(defaultValue: "artifacts-snapshots", description: 'Nexus hosted snapshots repo name', name: 'NEXUS_HOSTED_NAME_SNAPSHOTS')
+        
+        string(defaultValue: "artifacts-snapshots", description: 'Nexus hosted snapshots repo name', name: 'NEXUS_HOSTED_NAME_SNAPSHOTS')
 
-        string(defaultValue: '', name: 'EMAIL_RECIPIENT_LIST')
+        string(defaultValue: 'test@gmail.com', description: 'Notification recipients', name: 'EMAIL_RECIPIENT_LIST')
     }
     
     options {
@@ -215,7 +217,7 @@ stages {
                 
                 // send an email with the build result to the specified recipients
                 emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
-                    to: "${EMAIL_RECIPIENT_LIST}",
+                    to: "${params.EMAIL_RECIPIENT_LIST}",
                     subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
             }
         }
