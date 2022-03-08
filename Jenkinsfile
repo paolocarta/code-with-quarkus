@@ -78,20 +78,20 @@ stages {
         }
     }
 
-    // stage('Image Build') {
+    stage('Image Build') {
 
-    //     agent { label 'buildah' }
+        agent { label 'buildah' }
 
-    //     when {
-    //         // fake condition for now
-    //         branch 'master' 
-    //     }
+        // when {
+        //     // fake condition for now
+        //     branch 'master' 
+        // }
 
-    //     steps {
-    //         echo 'Building Image from Jar File'
+        steps {
+            echo 'Building Image from Jar File'
             
-    //     }
-    // }
+        }
+    }
 
     // stage('Push Docker Image') {
     //     when {
@@ -216,9 +216,9 @@ stages {
                 // }
                 
                 // send an email with the build result to the specified recipients
-                emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
-                    to: "${params.EMAIL_RECIPIENT_LIST}",
-                    subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
+                // emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+                //     to: "${params.EMAIL_RECIPIENT_LIST}",
+                //     subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
             }
         }
         
