@@ -90,12 +90,14 @@ stages {
         steps {
             container('buildah') {
                 echo 'Building Image from Jar File'
-            }           
-            
+            }            
         }
     }
 
     stage('Push Docker Image') {
+
+        agent { label 'buildah-x86' }
+
         // when {
         //     branch 'master'
         // }
@@ -103,8 +105,7 @@ stages {
         steps {
             container('buildah') {
                 echo 'Pushing Image'
-            }           
-            
+            }            
         }
     }
 
