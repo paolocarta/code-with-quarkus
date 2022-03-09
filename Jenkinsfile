@@ -108,6 +108,7 @@ stages {
         steps {
             container('buildah') {
                 echo 'Building Image from Jar File'
+                sh 'buildah bud --help'
             }            
         }
     }
