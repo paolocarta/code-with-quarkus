@@ -144,12 +144,13 @@ stages {
         }
         
         // stage executed after every other post condition has been evaluated, regardless of the Pipeline or stage’s status.
-        cleanup {
-            node('master') {
-                // clean up the pipeline workspace
-                cleanWs()
-            }
-        }
+        
+        // cleanup {
+        //     node('master') {
+        //         // clean up the pipeline workspace
+        //         cleanWs()
+        //     }
+        // }
     }
 
 }
