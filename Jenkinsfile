@@ -88,7 +88,9 @@ stages {
         // }
 
         steps {
-            echo 'Building Image from Jar File'
+            container('buildah') {
+                echo 'Building Image from Jar File'
+            }           
             
         }
     }
@@ -99,23 +101,23 @@ stages {
         // }
         
         steps {
-            
-            script {
-
-            }
-        }
-    }
-
-    stage('Update GitOps Repo') {
-        
-        // when {
-        //     branch 'master'
-        // }
-        
-        steps {
+            container('buildah') {
+                echo 'Pushing Image'
+            }           
             
         }
     }
+
+    // stage('Update GitOps Repo') {
+        
+    //     // when {
+    //     //     branch 'master'
+    //     // }
+        
+    //     steps {
+            
+    //     }
+    // }
 
   }
 
