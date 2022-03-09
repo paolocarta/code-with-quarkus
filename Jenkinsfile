@@ -78,6 +78,17 @@ stages {
         }
     }
 
+    stage('Test node') {
+
+        agent { label 'nodejs' }
+
+        steps {
+            container('buildah') {
+                echo 'nodejs'
+            }            
+        }
+    }
+
     stage('Image Build') {
 
         agent { label 'buildah-x86' }
