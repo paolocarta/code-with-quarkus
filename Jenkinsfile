@@ -79,6 +79,23 @@ stages {
         }
     }
 
+    stage('Code Build and Test') {
+
+        agent { label 'maven-2' }
+        steps {
+
+            configFileProvider([configFile(fileId: "${params.MAVEN_SETTINGS_ID}", variable: 'MAVEN_SETTINGS')]) {
+                
+                echo 'maven 2 build'
+                // sh "mvn -U -B clean package -s ${MAVEN_SETTINGS}"
+                // sh "./mvnw -U clean package -Pnexus-deploy -Dnexus.base.url=${NEXUS_URL} -Dnexus.hosted.name.releases=${NEXUS_HOSTED_NAME_RELEASES} -Dnexus.hosted.name.snapshots=${NEXUS_HOSTED_NAME_SNAPSHOTS} -s ${MAVEN_SETTINGS}"
+            }
+            
+            // git url: "${SOURCE_CODE_URL}"
+            // sh "mvn -B clean install -q"
+        }
+    }
+
     stage('Image Build') {
 
         agent { label 'buildah-x86' }
