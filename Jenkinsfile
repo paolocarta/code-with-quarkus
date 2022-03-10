@@ -73,8 +73,8 @@ stages {
                 
                 git "https://github.com/paolocarta/code-with-quarkus.git"
                 dir('/tmp/workspace/code-with-quarkus') {                     
-                    
-                    sh "mvn -U -B clean package -s ${MAVEN_SETTINGS}"
+                    sh "echo 'text' > my-file"
+                    // sh "mvn -U -B package -s ${MAVEN_SETTINGS}"
                     // sh "./mvnw -U clean package -Pnexus-deploy -Dnexus.base.url=${NEXUS_URL} -Dnexus.hosted.name.releases=${NEXUS_HOSTED_NAME_RELEASES} -Dnexus.hosted.name.snapshots=${NEXUS_HOSTED_NAME_SNAPSHOTS} -s ${MAVEN_SETTINGS}"
                 }
             }
@@ -92,6 +92,7 @@ stages {
 
         steps {
             container('buildah') {
+                sh "ls -l"
                 dir('/tmp/workspace/code-with-quarkus') {   
                     
                     sh "ls -l"
