@@ -72,7 +72,7 @@ stages {
             configFileProvider([configFile(fileId: "${params.MAVEN_SETTINGS_ID}", variable: 'MAVEN_SETTINGS')]) {
                 
                 // git "https://github.com/paolocarta/code-with-quarkus.git"
-                dir('/tmp/workspace/code-with-quarkus') {                     
+                dir('/tmp/workspace/') {                     
                     sh "ls -l"
                     // sh "mvn -U -B package -s ${MAVEN_SETTINGS}"
                 }
@@ -80,9 +80,30 @@ stages {
         }
     }
 
+    stage('test') {
+
+        agent { label 'maven' }
+
+        options {
+            skipDefaultCheckout true
+        }
+
+        steps {
+                dir('/tmp/workspace/') {      
+
+                    sh "ls -l"
+                }
+
+        }
+    }
+
     stage('Image Build') {
 
         agent { label 'buildah-x86' }
+
+        options {
+            skipDefaultCheckout true
+        }
 
         // when {
         //     // fake condition for now
