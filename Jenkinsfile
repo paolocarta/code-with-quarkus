@@ -93,11 +93,11 @@ stages {
         steps {
             container('buildah') {
                 sh "ls -l"
-                dir('/tmp/workspace/code-with-quarkus') {   
+                // dir('/tmp/workspace/code-with-quarkus') {   
                     
-                    sh "ls -l"
-                    sh 'buildah bud --help'
-                }
+                //     sh "ls -l"
+                //     sh 'buildah bud --help'
+                // }
             }            
         }
     }
