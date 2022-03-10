@@ -58,6 +58,7 @@ stages {
                     echo "Maven Settings file id? :: ${params.MAVEN_SETTINGS_ID}"
                     echo "NEXUS URL? :: ${params.NEXUS_URL}"
                     sh "printenv | sort"
+
             }
         }
     }
@@ -65,13 +66,17 @@ stages {
     stage('Code Build and Test') {
 
         agent { label 'maven' }
+
         steps {
 
             configFileProvider([configFile(fileId: "${params.MAVEN_SETTINGS_ID}", variable: 'MAVEN_SETTINGS')]) {
                 
-                // echo 'maven build'
-                sh "mvn -U -B clean package -s ${MAVEN_SETTINGS}"
-                // sh "./mvnw -U clean package -Pnexus-deploy -Dnexus.base.url=${NEXUS_URL} -Dnexus.hosted.name.releases=${NEXUS_HOSTED_NAME_RELEASES} -Dnexus.hosted.name.snapshots=${NEXUS_HOSTED_NAME_SNAPSHOTS} -s ${MAVEN_SETTINGS}"
+                git "https://github.com/paolocarta/code-with-quarkus.git"
+                dir('/tmp/workspace/code-with-quarkus') {                     
+                    
+                    sh "mvn -U -B clean package -s ${MAVEN_SETTINGS}"
+                    // sh "./mvnw -U clean package -Pnexus-deploy -Dnexus.base.url=${NEXUS_URL} -Dnexus.hosted.name.releases=${NEXUS_HOSTED_NAME_RELEASES} -Dnexus.hosted.name.snapshots=${NEXUS_HOSTED_NAME_SNAPSHOTS} -s ${MAVEN_SETTINGS}"
+                }
             }
         }
     }
@@ -87,22 +92,25 @@ stages {
 
         steps {
             container('buildah') {
-                // echo 'Building Image'
-                sh 'buildah bud --help'
+                dir('/tmp/workspace/code-with-quarkus') {   
+                    
+                    sh "ls -l"
+                    sh 'buildah bud --help'
+                }
             }            
         }
     }
 
-    stage('Push Docker Image') {
+    // stage('Push Docker Image') {
 
-        agent { label 'buildah-x86' }
+    //     agent { label 'buildah-x86' }
         
-        steps {
-            container('buildah') {
-                echo 'Pushing Image'
-            }            
-        }
-    }
+    //     steps {
+    //         container('buildah') {
+    //             echo 'Pushing Image'
+    //         }            
+    //     }
+    // }
 
     // stage('Update GitOps Repo') {
         
