@@ -71,11 +71,10 @@ stages {
 
             configFileProvider([configFile(fileId: "${params.MAVEN_SETTINGS_ID}", variable: 'MAVEN_SETTINGS')]) {
                 
-                git "https://github.com/paolocarta/code-with-quarkus.git"
+                // git "https://github.com/paolocarta/code-with-quarkus.git"
                 dir('/tmp/workspace/code-with-quarkus') {                     
-                    sh "echo 'text' > my-file"
+                    sh "ls -l"
                     // sh "mvn -U -B package -s ${MAVEN_SETTINGS}"
-                    // sh "./mvnw -U clean package -Pnexus-deploy -Dnexus.base.url=${NEXUS_URL} -Dnexus.hosted.name.releases=${NEXUS_HOSTED_NAME_RELEASES} -Dnexus.hosted.name.snapshots=${NEXUS_HOSTED_NAME_SNAPSHOTS} -s ${MAVEN_SETTINGS}"
                 }
             }
         }
@@ -97,6 +96,10 @@ stages {
                     
                 //     sh "ls -l"
                 //     sh 'buildah bud --help'
+                    //   buildah --storage-driver=$(params.STORAGE_DRIVER) bud \
+                    //     $(params.BUILD_EXTRA_ARGS) --format=$(params.FORMAT) \
+                    //     --tls-verify=$(params.TLSVERIFY) --no-cache --arch $(params.ARCH) \
+                    //     -f $(params.DOCKERFILE) -t $(params.IMAGE) $(params.CONTEXT)
                 // }
             }            
         }
