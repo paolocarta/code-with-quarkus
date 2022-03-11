@@ -141,7 +141,7 @@ stages {
         // stage executed always, regardless of the completion status of the Pipeline’s or stage’s run
         always {
             // cleanWs()
-            sh "rm -rf /tmp/workspace/code-with-quarkus"
+            sh "rm -rf /tmp/workspace"
         }
         
         // stage executed after every other post condition has been evaluated, regardless of the Pipeline or stage’s status.
