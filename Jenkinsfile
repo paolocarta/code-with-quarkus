@@ -105,9 +105,9 @@ stages {
                 sh "id"
                 // sh "ls -l"
                     
-                sh "buildah --storage-driver=vfs bud --format=oci \
-                        --tls-verify=true --no-cache \
-                        -f src/main/docker/Dockerfile.jvm -t clamer/code-with-quarkus ."
+                // sh "buildah --storage-driver=vfs bud --format=oci \
+                //         --tls-verify=true --no-cache \
+                //         -f ./src/main/docker/Dockerfile.jvm -t clamer/code-with-quarkus ./target"
             }            
         }
     }
