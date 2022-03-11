@@ -77,11 +77,11 @@ stages {
                 
                 sh "pwd"
                 sh "id"
-                // git "https://github.com/paolocarta/code-with-quarkus.git"
-                dir('/tmp/workspace/') {                     
-                    sh "echo maven"
+                sh "ls -l /tmp"
+                sh "ls -l /tmp/workspace"
+                // dir('/tmp/workspace/') {                     
                     // sh "mvn -U -B package -s ${MAVEN_SETTINGS}"
-                }
+                // }
             }
         }
     }
