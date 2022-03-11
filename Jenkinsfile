@@ -48,6 +48,10 @@ stages {
         
         agent any
 
+        options {
+            skipDefaultCheckout true
+        }
+
         steps {
             script {
                     // notifyBuild('STARTED')
@@ -71,6 +75,9 @@ stages {
 
             configFileProvider([configFile(fileId: "${params.MAVEN_SETTINGS_ID}", variable: 'MAVEN_SETTINGS')]) {
                 
+                sh "pwd"
+                sh "ls -l /"
+                sh "ls -l /tmp"
                 // git "https://github.com/paolocarta/code-with-quarkus.git"
                 dir('/tmp/workspace/') {                     
                     sh "ls -l"
@@ -89,6 +96,9 @@ stages {
         }
 
         steps {
+                sh "pwd"
+                sh "ls -l /"
+                sh "ls -l /tmp"
                 dir('/tmp/workspace/') {      
 
                     sh "ls -l"
@@ -112,7 +122,8 @@ stages {
 
         steps {
             container('buildah') {
-                sh "ls -l"
+                sh "pwd"
+                // sh "ls -l"
                 // dir('/tmp/workspace/code-with-quarkus') {   
                     
                 //     sh "ls -l"
