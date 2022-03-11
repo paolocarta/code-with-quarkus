@@ -140,32 +140,11 @@ stages {
 
         // stage executed always, regardless of the completion status of the Pipeline’s or stage’s run
         always {
-            node('master') {
-                
-                // dir('widgets') {
-                   
-                //     // publish screenshots of failed integration tests, if any
-                //     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'cypress/cypress/screenshots', reportFiles: '**', reportName: 'Cypress screenshots', reportTitles: ''])
-                   
-                //     // publish videos of the tests, if any
-                //     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'cypress/cypress/videos', reportFiles: '**', reportName: 'Cypress videos', reportTitles: ''])
-                // }
-                
-                // send an email with the build result to the specified recipients
-                // emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
-                //     to: "${params.EMAIL_RECIPIENT_LIST}",
-                //     subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
-            }
+            cleanWs()
         }
         
         // stage executed after every other post condition has been evaluated, regardless of the Pipeline or stage’s status.
         
-        // cleanup {
-        //     node('master') {
-        //         // clean up the pipeline workspace
-        //         cleanWs()
-        //     }
-        // }
     }
 
 }
