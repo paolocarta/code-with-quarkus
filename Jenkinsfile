@@ -76,6 +76,7 @@ stages {
             configFileProvider([configFile(fileId: "${params.MAVEN_SETTINGS_ID}", variable: 'MAVEN_SETTINGS')]) {
                 
                 sh "pwd"
+                sh "id"
                 sh "ls -l /"
                 sh "ls -l /tmp"
                 // git "https://github.com/paolocarta/code-with-quarkus.git"
@@ -97,6 +98,7 @@ stages {
 
         steps {
                 sh "pwd"
+                sh "id"
                 sh "ls -l /"
                 sh "ls -l /tmp"
                 dir('/tmp/workspace/') {      
@@ -123,6 +125,7 @@ stages {
         steps {
             container('buildah') {
                 sh "pwd"
+                sh "id"
                 // sh "ls -l"
                 // dir('/tmp/workspace/code-with-quarkus') {   
                     
