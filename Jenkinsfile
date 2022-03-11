@@ -103,7 +103,7 @@ stages {
             container('buildah') {
                 sh "pwd"
                 sh "id"
-                // sh "ls -l"
+                sh "ls -l"
                     
                 // sh "buildah --storage-driver=vfs bud --format=oci \
                 //         --tls-verify=true --no-cache \
