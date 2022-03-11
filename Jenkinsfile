@@ -129,13 +129,9 @@ stages {
                 // sh "ls -l"
                 // dir('/tmp/workspace/code-with-quarkus') {   
                     
-                //     sh "ls -l"
-                //     sh 'buildah bud --help'
-                    //   buildah --storage-driver=$(params.STORAGE_DRIVER) bud \
-                    //     $(params.BUILD_EXTRA_ARGS) --format=$(params.FORMAT) \
-                    //     --tls-verify=$(params.TLSVERIFY) --no-cache --arch $(params.ARCH) \
-                    //     -f $(params.DOCKERFILE) -t $(params.IMAGE) $(params.CONTEXT)
-                // }
+                sh "buildah --storage-driver=vfs bud --format=oci \
+                        --tls-verify=true --no-cache \
+                        -f src/main/docker -t clamer/code-with-quarkus ."
             }            
         }
     }
