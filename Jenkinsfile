@@ -103,12 +103,11 @@ stages {
             container('buildah') {
                 sh "pwd"
                 sh "id"
-                sh "ls -l"
-                // dir('/tmp/workspace/code-with-quarkus') {   
+                // sh "ls -l"
                     
                 sh "buildah --storage-driver=vfs bud --format=oci \
                         --tls-verify=true --no-cache \
-                        -f src/main/docker -t clamer/code-with-quarkus ."
+                        -f src/main/docker/Dockerfile.jvm -t clamer/code-with-quarkus ."
             }            
         }
     }
