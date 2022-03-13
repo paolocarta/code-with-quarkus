@@ -2,6 +2,12 @@ pipeline {
 
     agent any
 
+    // agent {
+    //     kubernetes {
+    //         yamlFile 'pod-template-buildah.yaml'
+    //     }
+    // }
+
     parameters {
 
         booleanParam(defaultValue: false,description: 'Deploy to Prod Environment ?', name: 'DEPLOY_PROD')
