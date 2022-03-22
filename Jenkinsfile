@@ -113,7 +113,8 @@ stages {
 
                 sh "buildah --storage-driver=vfs bud --format=oci \
                         --tls-verify=true --no-cache \
-                        -f ./src/main/docker/Dockerfile.jvm -t clamer/code-with-quarkus ."
+                        -f ./src/main/docker/Dockerfile.jvm \
+                        -t code-with-quarkusimage-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus ."
 
             }            
         }
