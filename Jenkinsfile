@@ -85,6 +85,7 @@ stages {
                 sh "id"
                 sh "ls -l /tmp"
                 sh "ls -l /tmp/workspace"
+                sh "ls -l /var/lib/jenkins/.m2"
                 sh "mvn -U -B package -s ${MAVEN_SETTINGS}"
             }
         }
@@ -108,7 +109,6 @@ stages {
                 sh "pwd"
                 sh "id"
                 sh "echo $HOME"
-                sh "ls -l /var/lib/jenkins/.m2"
                 sh "ls -l"
                 sh "ls -l /tmp/workspace/code-with-quarkus/target"
                     
