@@ -85,7 +85,8 @@ stages {
                 sh "id"
                 sh "ls -l /tmp"
                 sh "ls -l /tmp/workspace"
-                sh "ls -l /var/lib/jenkins/.m2"
+                sh "echo $HOME"
+                sh "ls -l $HOME"
                 sh "mvn -U -B package -s ${MAVEN_SETTINGS}"
             }
         }
