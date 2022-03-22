@@ -86,7 +86,7 @@ stages {
                 sh "ls -l /tmp"
                 sh "ls -l /tmp/workspace"
                 sh "echo $HOME"
-                sh "ls -l $HOME"
+                sh "ls -la $HOME/.m2"
                 sh "mvn -U -B package -s ${MAVEN_SETTINGS}"
             }
         }
@@ -112,6 +112,9 @@ stages {
                 sh "echo $HOME"
                 sh "ls -l"
                 sh "ls -l /tmp/workspace/code-with-quarkus/target"
+                sh "ls -l /tmp/workspace/code-with-quarkus/target/quarkus-app/"
+                sh "ls -l /tmp/workspace/code-with-quarkus/target/quarkus-app/lib"
+                sh "ls -l /tmp/workspace/code-with-quarkus/target/quarkus-app/app"
                     
                 sh "buildah --storage-driver=vfs bud --format=oci \
                         --tls-verify=true --no-cache \
