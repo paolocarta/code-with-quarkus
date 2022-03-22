@@ -112,13 +112,13 @@ stages {
                 sh "echo $HOME"
                 sh "ls -l"
                 sh "ls -l /tmp/workspace/code-with-quarkus/target"
-                sh "ls -l /tmp/workspace/code-with-quarkus/target/quarkus-app/"
-                sh "ls -l /tmp/workspace/code-with-quarkus/target/quarkus-app/lib"
-                sh "ls -l /tmp/workspace/code-with-quarkus/target/quarkus-app/app"
-                    
-                sh "buildah --storage-driver=vfs bud --format=oci \
-                        --tls-verify=true --no-cache \
-                        -f ./src/main/docker/Dockerfile.jvm -t clamer/code-with-quarkus ./target"
+
+                dir("target") {
+                    sh "buildah --storage-driver=vfs bud --format=oci \
+                            --tls-verify=true --no-cache \
+                            -f ../src/main/docker/Dockerfile.jvm -t clamer/code-with-quarkus ."
+                }    
+
             }            
         }
     }
