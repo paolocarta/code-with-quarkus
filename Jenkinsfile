@@ -1,6 +1,6 @@
 pipeline {
 
-    agent any
+    agent { label 'maven' }
 
     // agent {
     //     kubernetes {
@@ -51,8 +51,6 @@ pipeline {
 stages {
 
     stage("Initialize") {
-        
-        agent any
 
         options {
             skipDefaultCheckout true
@@ -116,24 +114,31 @@ stages {
                 sh "buildah --storage-driver=vfs bud --format=oci \
                         --tls-verify=true --no-cache \
                         -f ./src/main/docker/Dockerfile.jvm -t clamer/code-with-quarkus ."
-                
-                sh "buildah --storage-driver=vfs push --tls-verify=false \
-                        clamer/code-with-quarkus docker://clamer/code-with-quarkus"
 
             }            
         }
     }
 
-    // stage('Push Docker Image') {
+    stage('Image Push') {
 
-    //     agent { label 'buildah-x86' }
-        
-    //     steps {
-    //         container('buildah') {
-    //             echo 'Pushing Image'
-    //         }            
-    //     }
-    // }
+        agent { label 'buildah-x86' }
+
+        options {
+            skipDefaultCheckout true
+        }
+
+        steps {
+            container('buildah') {
+                sh "pwd"
+                sh "id"
+                
+                sh "buildah --storage-driver=vfs push --tls-verify=false \
+                        code-with-quarkusimage-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus \
+                        docker://code-with-quarkusimage-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus"
+
+            }            
+        }
+    }
 
     // stage('Update GitOps Repo') {
         
