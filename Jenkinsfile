@@ -85,6 +85,7 @@ stages {
                 sh "id"
                 sh "ls -l /tmp"
                 sh "ls -l /tmp/workspace"
+                sh "mvn -U -B package -s ${MAVEN_SETTINGS}"
                 // dir('/tmp/workspace/') {                     
                     // sh "mvn -U -B package -s ${MAVEN_SETTINGS}"
                 // }
@@ -109,7 +110,7 @@ stages {
             container('buildah') {
                 sh "pwd"
                 sh "id"
-                // sh "ls -l"
+                sh "ls -l"
                     
                 sh "buildah --storage-driver=vfs bud --format=oci \
                         --tls-verify=true --no-cache \
