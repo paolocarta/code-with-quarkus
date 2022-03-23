@@ -1,6 +1,6 @@
 pipeline {
 
-    agent { label 'maven' }
+    agent any
 
     // agent {
     //     kubernetes {
@@ -159,6 +159,7 @@ stages {
         // stage executed always, regardless of the completion status of the Pipeline’s or stage’s run
         always {
             // cleanWs()
+            sh "ls -l /tmp/workspace"
             sh "rm -rf /tmp/workspace"
         }
         
