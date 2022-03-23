@@ -114,7 +114,7 @@ stages {
                 sh "buildah --storage-driver=vfs bud --format=oci \
                         --tls-verify=true --no-cache \
                         -f ./src/main/docker/Dockerfile.jvm \
-                        -t code-with-quarkusimage-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus ."
+                        -t image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus ."
 
             }            
         }
@@ -134,8 +134,8 @@ stages {
                 sh "id"
                 
                 sh "buildah --storage-driver=vfs push --tls-verify=false \
-                        code-with-quarkusimage-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus \
-                        docker://code-with-quarkusimage-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus"
+                        image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus \
+                        docker://image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus"
 
             }            
         }
