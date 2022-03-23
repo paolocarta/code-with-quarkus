@@ -48,119 +48,121 @@ pipeline {
 
 
   
-stages {
+    stages {
 
-    stage("Initialize") {
+        stage("Initialize") {
 
-        options {
-            skipDefaultCheckout true
-        }
+            options {
+                skipDefaultCheckout true
+            }
 
-        steps {
-            script {
-                    // notifyBuild('STARTED')
-                    echo "Build number: ${BUILD_NUMBER} - Build id: ${env.BUILD_ID} on Jenkins instance: ${env.JENKINS_URL}"
+            steps {
+                script {
+                        // notifyBuild('STARTED')
+                        echo "Build number: ${BUILD_NUMBER} - Build id: ${env.BUILD_ID} on Jenkins instance: ${env.JENKINS_URL}"
 
-                    echo "Deploy to QA? :: ${params.DEPLOY_QA}"
+                        echo "Deploy to QA? :: ${params.DEPLOY_QA}"
 
-                    echo "Maven Settings file id? :: ${params.MAVEN_SETTINGS_ID}"
-                    echo "NEXUS URL? :: ${params.NEXUS_URL}"
-                    sh "printenv | sort"
+                        echo "Maven Settings file id? :: ${params.MAVEN_SETTINGS_ID}"
+                        echo "NEXUS URL? :: ${params.NEXUS_URL}"
+                        sh "printenv | sort"
 
+                }
             }
         }
-    }
 
-    stage('Code Build and Test') {
+        stage('Code Build and Test') {
 
-        agent { label 'maven' }
+            agent { label 'maven' }
 
-        steps {
+            steps {
 
-            configFileProvider([configFile(fileId: "${params.MAVEN_SETTINGS_ID}", variable: 'MAVEN_SETTINGS')]) {
+                configFileProvider([configFile(fileId: "${params.MAVEN_SETTINGS_ID}", variable: 'MAVEN_SETTINGS')]) {
+                    
+                    sh "pwd"
+                    sh "id"
+                    sh "ls -l /tmp"
+                    sh "ls -l /tmp/workspace"
+                    sh "echo $HOME"
+                    sh "ls -la $HOME/.m2"
+                    sh "mvn -U -B package -s ${MAVEN_SETTINGS}"
+                }
+            }
+        }
+
+        stage('Image Build') {
+
+            agent { label 'buildah-x86' }
+
+            options {
+                skipDefaultCheckout true
+            }
+
+            // when {
+            //     // fake condition for now
+            //     branch 'master' 
+            // }
+
+            steps {
+                container('buildah') {
+                    sh "pwd"
+                    sh "id"
+                    sh "echo $HOME"
+                    sh "ls -l"
+                    sh "ls -l /tmp/workspace/code-with-quarkus/target"
+
+                    sh "buildah --storage-driver=vfs bud --format=oci \
+                            --tls-verify=true --no-cache \
+                            -f ./src/main/docker/Dockerfile.jvm \
+                            -t image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus ."
+
+                }            
+            }
+        }
+
+        stage('Image Push') {
+
+            agent { label 'buildah-x86' }
+
+            options {
+                skipDefaultCheckout true
+            }
+
+            steps {
+                container('buildah') {
+                    sh "pwd"
+                    sh "id"
+                    
+                    sh "buildah --storage-driver=vfs push --tls-verify=false \
+                            image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus \
+                            docker://image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus"
+
+                }            
+            }
+        }
+
+        // stage('Update GitOps Repo') {
+            
+        //     // when {
+        //     //     branch 'master'
+        //     // }
+            
+        //     steps {
                 
-                sh "pwd"
-                sh "id"
-                sh "ls -l /tmp"
-                sh "ls -l /tmp/workspace"
-                sh "echo $HOME"
-                sh "ls -la $HOME/.m2"
-                sh "mvn -U -B package -s ${MAVEN_SETTINGS}"
-            }
-        }
-    }
-
-    stage('Image Build') {
-
-        agent { label 'buildah-x86' }
-
-        options {
-            skipDefaultCheckout true
-        }
-
-        // when {
-        //     // fake condition for now
-        //     branch 'master' 
+        //     }
         // }
 
-        steps {
-            container('buildah') {
-                sh "pwd"
-                sh "id"
-                sh "echo $HOME"
-                sh "ls -l"
-                sh "ls -l /tmp/workspace/code-with-quarkus/target"
-
-                sh "buildah --storage-driver=vfs bud --format=oci \
-                        --tls-verify=true --no-cache \
-                        -f ./src/main/docker/Dockerfile.jvm \
-                        -t image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus ."
-
-            }            
-        }
     }
-
-    stage('Image Push') {
-
-        agent { label 'buildah-x86' }
-
-        options {
-            skipDefaultCheckout true
-        }
-
-        steps {
-            container('buildah') {
-                sh "pwd"
-                sh "id"
-                
-                sh "buildah --storage-driver=vfs push --tls-verify=false \
-                        image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus \
-                        docker://image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus"
-
-            }            
-        }
-    }
-
-    // stage('Update GitOps Repo') {
-        
-    //     // when {
-    //     //     branch 'master'
-    //     // }
-        
-    //     steps {
-            
-    //     }
-    // }
-
-  }
 
     post {
+
+        agent { label 'maven' }
 
         // stage executed always, regardless of the completion status of the Pipeline’s or stage’s run
         always {
             // cleanWs()
             sh "ls -l /tmp/workspace"
-            sh "rm -rf /tmp/workspace"
+            sh "rm -rf /tmp/workspace/code-with-quarkus"
         }
         
         // stage executed after every other post condition has been evaluated, regardless of the Pipeline or stage’s status.
