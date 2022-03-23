@@ -133,7 +133,7 @@ pipeline {
                     
                     sh "buildah --storage-driver=vfs push --tls-verify=false \
                             image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus \
-                            docker://image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus"
+                            docker://image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus:latest"
 
                 }            
             }
