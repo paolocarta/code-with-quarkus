@@ -149,7 +149,7 @@ pipeline {
             // }
             
             steps {
-                
+               sh "echo updating gitops repo" 
             }
         }
 
