@@ -143,7 +143,7 @@ pipeline {
 
             // post {
 
-            //     failure {
+            //     always {
                     
             //     }
                 
@@ -168,6 +168,8 @@ pipeline {
         // stage executed always, regardless of the completion status of the Pipeline’s or stage’s run
         always {
             node('maven') { 
+                sh 'ls -l /tmp'
+                sh 'ls -l /tmp/workspace'
                 sh 'rm -rf /tmp/workspace'
             }
             // cleanWs()
