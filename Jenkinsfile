@@ -83,7 +83,7 @@ pipeline {
                     sh "id"
                     sh "ls -l /tmp/workspace"
                     sh "echo $HOME"
-                    sh "ls -la $HOME/.m2"
+                    sh "ls -l $HOME/.m2"
                     sh "mvn -U -B package -s ${MAVEN_SETTINGS}"
                 }
             }
@@ -140,6 +140,14 @@ pipeline {
                     }
                 }            
             }
+
+            // post {
+
+            //     failure {
+                    
+            //     }
+                
+            // }
         }
 
         stage('Update GitOps Repo') {
@@ -159,11 +167,10 @@ pipeline {
 
         // stage executed always, regardless of the completion status of the Pipeline’s or stage’s run
         always {
+            node('maven') { 
+                sh 'rm -rf /tmp/workspace'
+            }
             // cleanWs()
-            sh "pwd"
-            sh "id"
-            sh "hostname"
-            sh "echo post-step"
         }
         
         // stage executed after every other post condition has been evaluated, regardless of the Pipeline or stage’s status.
