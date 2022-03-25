@@ -82,6 +82,7 @@ pipeline {
                     sh "pwd"
                     sh "id"
                     sh "ls -l /tmp/workspace"
+                    sh "ls -l /tmp/workspace/code-with-quarkus"
                     sh "echo $HOME"
                     sh "ls -l $HOME/.m2"
                     sh "mvn -U -B package -s ${MAVEN_SETTINGS}"
@@ -168,9 +169,8 @@ pipeline {
         // stage executed always, regardless of the completion status of the Pipeline’s or stage’s run
         always {
             node('maven') { 
-                sh 'ls -l /tmp/workspace'
-                sh 'rm -rf /tmp/workspace/code-with-quarkus'
-                sh 'ls -l /tmp/workspace'
+                // sh 'ls -l /tmp/workspace'
+                // sh 'rm -rf /tmp/workspace/code-with-quarkus'
             }
             // cleanWs()
         }
