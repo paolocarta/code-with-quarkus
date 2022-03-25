@@ -21,10 +21,10 @@ spec:
     tty: true
     volumeMounts:
     - mountPath: "/var/lib/containers"
-      name: "volume-0"
+      name: "container-layers-volume"
       readOnly: false
     - mountPath: "/tmp"
-      name: "workspace-volume"
+      name: "source-code-volume"
       readOnly: false
     workingDir: "/tmp"
   - image: "image-registry.openshift-image-registry.svc:5000/openshift/jenkins-agent-maven:latest"
@@ -33,10 +33,10 @@ spec:
     tty: false
     volumeMounts:
     - mountPath: "/var/lib/containers"
-      name: "volume-0"
+      name: "container-layers-volume"
       readOnly: false
     - mountPath: "/tmp"
-      name: "workspace-volume"
+      name: "source-code-volume"
       readOnly: false
     workingDir: "/tmp"
   nodeSelector:
@@ -44,11 +44,11 @@ spec:
   restartPolicy: "Never"
   serviceAccountName: "jenkins-agent"
   volumes:
-  - name: "volume-0"
+  - name: "container-layers-volume"
     persistentVolumeClaim:
       claimName: "container-layers"
       readOnly: false
-  - name: "workspace-volume"
+  - name: "source-code-volume"
     persistentVolumeClaim:
       claimName: "source-code"
       readOnly: false
