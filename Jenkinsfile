@@ -1,11 +1,10 @@
 pipeline {
 
-    agent any
-
     agent {
         kubernetes {
             yamlFile 'pod-template-buildah.yaml'
         }
+        any
     }
 
     parameters {
