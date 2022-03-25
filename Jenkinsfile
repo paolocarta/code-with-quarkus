@@ -1,11 +1,6 @@
 pipeline {
 
-    agent {
-        kubernetes {
-            yamlFile 'pod-template-buildah.yaml'
-        }
-        any
-    }
+    agent any
 
     parameters {
 
@@ -91,7 +86,13 @@ pipeline {
 
         stage('Image Build') {
 
-            agent { label 'buildah-x86' }
+            // agent { label 'buildah-x86' }
+
+            agent {
+                kubernetes {
+                    yamlFile 'pod-template-buildah.yaml'
+                }
+            }
 
             options {
                 skipDefaultCheckout true
