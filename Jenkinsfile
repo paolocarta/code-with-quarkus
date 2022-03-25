@@ -2,11 +2,11 @@ pipeline {
 
     agent any
 
-    // agent {
-    //     kubernetes {
-    //         yamlFile 'pod-template-buildah.yaml'
-    //     }
-    // }
+    agent {
+        kubernetes {
+            yamlFile 'pod-template-buildah.yaml'
+        }
+    }
 
     parameters {
 
