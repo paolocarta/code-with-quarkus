@@ -5,13 +5,12 @@ pipeline {
     parameters {
 
         booleanParam(defaultValue: false,description: 'Deploy to Prod Environment ?', name: 'DEPLOY_PROD')
+        
         string(defaultValue: "maven-settings-general", description: 'Maven Settings File Id', name: 'MAVEN_SETTINGS_ID')
-        string(defaultValue: "http://baifuseqa01.internal.com/nexus", description: 'Nexus URL', name: 'NEXUS_URL')
+        string(defaultValue: "http://ccg.internal.com/nexus", description: 'Nexus URL', name: 'NEXUS_URL')
         string(defaultValue: "artifacts", description: 'Nexus hosted repo name', name: 'NEXUS_HOSTED_NAME_RELEASES')
         string(defaultValue: "artifacts-snapshots", description: 'Nexus hosted snapshots repo name', name: 'NEXUS_HOSTED_NAME_SNAPSHOTS')
         
-        string(defaultValue: "artifacts-snapshots", description: 'Nexus hosted snapshots repo name', name: 'NEXUS_HOSTED_NAME_SNAPSHOTS')
-
         string(defaultValue: 'test@gmail.com', description: 'Notification recipients', name: 'EMAIL_RECIPIENT_LIST')
     }
     
@@ -32,12 +31,12 @@ pipeline {
     }
     
     triggers {
-        pollSCM "*/2 * * * *"
+        pollSCM "*/1 * * * *"
     }
 
     environment {
 
-        PLACEHOLDER_VARIABLE   = 'TBD'
+        CI_CD_NAMESPACE   = 'cicd'
     }
 
 
@@ -113,7 +112,7 @@ pipeline {
                     sh "buildah --storage-driver=vfs bud --format=oci \
                             --tls-verify=true --no-cache \
                             -f ./src/main/docker/Dockerfile.jvm \
-                            -t image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus ."
+                            -t image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:${BUILD_NUMBER} ."
 
                 }            
             }
@@ -141,8 +140,8 @@ pipeline {
                         
                         sh "buildah --storage-driver=vfs push --tls-verify=false \
                             --creds jenkins:${TOKEN} \
-                            image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus \
-                            docker://image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus:latest"    
+                            image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:${BUILD_NUMBER} \
+                            docker://image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:${BUILD_NUMBER}"    
                     }
                 }            
             }
@@ -171,7 +170,6 @@ pipeline {
 
     post {
 
-        // stage executed always, regardless of the completion status of the Pipeline’s or stage’s run
         always {
             sh 'echo post-action-always'
 
@@ -181,9 +179,7 @@ pipeline {
             // }
 
             // cleanWs()
-        }
-        
-        // stage executed after every other post condition has been evaluated, regardless of the Pipeline or stage’s status.
+        }        
         
     }
 
