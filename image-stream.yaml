@@ -1,0 +1,25 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  creationTimestamp: "2022-03-23T15:51:06Z"
+  generation: 1
+  name: code-with-quarkus
+  namespace: cicd
+  resourceVersion: "1122062"
+  uid: e557a555-3f3d-4e3b-9c9c-90155a959f4f
+spec:
+  lookupPolicy:
+    local: false
+status:
+  dockerImageRepository: image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus
+  tags:
+  - items:
+    - created: "2022-03-23T17:17:49Z"
+      dockerImageReference: image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus@sha256:d85bda1802944b3d1a26731734d74897382ee369639ff06b813c3b8bb1336ba3
+      generation: 1
+      image: sha256:d85bda1802944b3d1a26731734d74897382ee369639ff06b813c3b8bb1336ba3
+    - created: "2022-03-23T15:51:06Z"
+      dockerImageReference: image-registry.openshift-image-registry.svc:5000/cicd/code-with-quarkus@sha256:8a26a0849b39924fe063bbc4c198513f6fc70be82aa6ea0f2caf868321f91bd8
+      generation: 1
+      image: sha256:8a26a0849b39924fe063bbc4c198513f6fc70be82aa6ea0f2caf868321f91bd8
+    tag: latest
