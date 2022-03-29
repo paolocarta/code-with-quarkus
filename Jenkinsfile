@@ -37,8 +37,6 @@ pipeline {
     environment {
 
         CI_CD_NAMESPACE   = 'cicd'
-        HTTP_PROXY        = 'http://10.0.30.114:8080'
-        HTTPS_PROXY       = 'http://10.0.30.114:8080'
     }
   
     stages {
@@ -95,6 +93,12 @@ pipeline {
 
             options {
                 skipDefaultCheckout true
+            }
+
+            environment {
+
+                HTTP_PROXY        = 'http://10.0.30.114:8080'
+                HTTPS_PROXY       = 'http://10.0.30.114:8080'
             }
 
             // when {
