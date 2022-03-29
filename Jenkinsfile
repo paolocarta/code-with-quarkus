@@ -119,7 +119,7 @@ pipeline {
                     sh "buildah --storage-driver=vfs bud --format=oci \
                             --tls-verify=true --no-cache \
                             -f ./src/main/docker/Dockerfile.jvm \
-                            -t image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:${BUILD_NUMBER} ."
+                            -t image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:8 ."
 
                 }            
             }
@@ -147,8 +147,8 @@ pipeline {
                         
                         sh "buildah --storage-driver=vfs push --tls-verify=false \
                             --creds jenkins:${TOKEN} \
-                            image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:${BUILD_NUMBER} \
-                            docker://image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:${BUILD_NUMBER}"    
+                            image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:8 \
+                            docker://image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:8"    
                     }
                 }            
             }
