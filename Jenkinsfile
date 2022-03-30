@@ -64,7 +64,7 @@ pipeline {
 
         stage('Code Build and Test') {
 
-            agent { label 'maven' }
+            agent { label 'maven-ppc64le' }
 
             steps {
 
