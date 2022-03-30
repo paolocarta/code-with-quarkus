@@ -65,8 +65,10 @@ pipeline {
         stage('Code Build and Test') {
 
             agent { 
-                label 'maven-ppc64le'
-                cloud 'openshift-power-enxctmiapp'
+                kubernetes {
+                    label 'maven-ppc64le'
+                    cloud 'openshift-power-enxctmiapp'
+                }
             }
 
             steps {
