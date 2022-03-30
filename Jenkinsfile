@@ -67,9 +67,19 @@ pipeline {
             agent { 
                 kubernetes {
                     label 'maven-ppc64le'
-                    cloud 'openshift-power-enxctmiapp'
+                    notexisting 'tedt'
+                    // cloud 'openshift-power-enxctmiapp' 
                 }
             }
+
+            // podTemplate(cloud: 'openshift-power-enxctmiapp', label: 'maven-ppc64le' yamlFile: readTrusted('pod-template-buildah.yaml')) {
+                
+            //     node('maven-ppc64le') {
+            //         container('maven'){
+            //             sh 'echo hello'
+            //         }  
+            //     }
+            // }
 
             steps {
 
@@ -92,7 +102,6 @@ pipeline {
 
             agent {
                 kubernetes {
-                    // cloud 'openshift-power-enxctmiapp'
                     yamlFile 'pod-template-buildah.yaml'
                 }
             }
