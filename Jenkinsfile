@@ -67,8 +67,7 @@ pipeline {
             agent { 
                 kubernetes {
                     label 'maven-ppc64le'
-                    notexisting 'tedt'
-                    // cloud 'openshift-power-enxctmiapp' 
+                    cloud 'openshift-power-enxctmiapp' 
                 }
             }
 
