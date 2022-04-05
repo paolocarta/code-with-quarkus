@@ -1,0 +1,32 @@
+apiVersion: "v1"
+kind: "Pod"
+metadata:
+  labels:
+    jenkins: "slave"
+    jenkins/label: "maven-ppc64le"
+spec:
+  containers:
+  - env:
+    - name: "JENKINS_AGENT_WORKDIR"
+      value: "/tmp"
+    image: "image-registry.openshift-image-registry.svc:5000/openshift/jenkins-agent-maven:latest"
+    imagePullPolicy: "Always"
+    name: "jnlp"
+    resources:
+      limits: {}
+      requests: {}
+    securityContext:
+      privileged: true
+    tty: false
+    volumeMounts:
+    - mountPath: "/tmp"
+      name: "workspace-volume"
+      readOnly: false
+    workingDir: "/tmp"
+  nodeSelector:
+    kubernetes.io/os: "linux"
+  restartPolicy: "Never"
+  serviceAccountName: "jenkins-agent"
+  volumes:
+  - name: "workspace-volume"
+    emptyDir: {}
