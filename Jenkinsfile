@@ -66,9 +66,9 @@ pipeline {
 
             agent { 
                 kubernetes {
-                    // label 'maven-ppc64le'
+                    label 'maven-ppc64le'
                     cloud 'openshift-power-enxctmiapp'
-                    yamlFile 'pod-template-mvn-persistency.yaml'
+                    // yamlFile 'pod-template-mvn-persistency.yaml'
 
                 }
             }
