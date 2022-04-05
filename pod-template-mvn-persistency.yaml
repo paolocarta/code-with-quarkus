@@ -20,10 +20,10 @@ spec:
     tty: false
     volumeMounts:
     - mountPath: "/home/jenkins/.m2"
-      name: "volume-0"
+      name: "maven-cache"
       readOnly: false
     - mountPath: "/tmp"
-      name: "workspace-volume"
+      name: "source-code"
       readOnly: false
     workingDir: "/tmp"
   nodeSelector:
@@ -31,11 +31,11 @@ spec:
   restartPolicy: "Never"
   serviceAccountName: "jenkins-agent"
   volumes:
-  - name: "volume-0"
+  - name: "maven-cache"
     persistentVolumeClaim:
       claimName: "maven-cache"
       readOnly: false
-  - name: "workspace-volume"
+  - name: "source-code"
     persistentVolumeClaim:
       claimName: "source-code"
       readOnly: false
