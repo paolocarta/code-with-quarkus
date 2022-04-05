@@ -66,7 +66,7 @@ pipeline {
 
             agent { 
                 kubernetes {
-                    label 'maven-ppc64le'
+                    label 'maven-ppc64le-test'
                     cloud 'openshift-power-enxctmiapp' 
                 }
             }
@@ -87,9 +87,8 @@ pipeline {
                     sh "pwd"
                     sh "id"
                     sh "ls -l /tmp/workspace"
-                    sh "ls -l /tmp/workspace/code-with-quarkus"
                     sh "echo $HOME"
-                    sh "ls -l $HOME/.m2"
+                    // sh "ls -l $HOME/.m2"
                     sh "mvn -U -B package -s ${MAVEN_SETTINGS}"
                 }
             }
