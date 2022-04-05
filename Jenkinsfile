@@ -103,6 +103,7 @@ pipeline {
             agent {
                 kubernetes {
                     yamlFile 'pod-template-buildah.yaml'
+                    cloud 'openshift-power-enxctmiapp'
                 }
             }
 
@@ -146,6 +147,7 @@ pipeline {
             agent {
                 kubernetes {
                     yamlFile 'pod-template-buildah.yaml'
+                    cloud 'openshift-power-enxctmiapp'
                 }
             }
 
