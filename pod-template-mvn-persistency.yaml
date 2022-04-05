@@ -17,7 +17,7 @@ spec:
       requests: {}
     securityContext:
       privileged: true
-    tty: false
+    tty: true
     volumeMounts:
     - mountPath: "/home/jenkins/.m2"
       name: "maven-cache"
