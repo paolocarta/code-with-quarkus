@@ -66,8 +66,10 @@ pipeline {
 
             agent { 
                 kubernetes {
-                    label 'maven-ppc64le'
-                    cloud 'openshift-power-enxctmiapp' 
+                    // label 'maven-ppc64le'
+                    cloud 'openshift-power-enxctmiapp'
+                    yamlFile 'pod-template-mvn-persistency'
+
                 }
             }
 
@@ -87,7 +89,6 @@ pipeline {
                     sh "pwd"
                     sh "id"
                     sh "ls -l /tmp/workspace"
-                    sh "ls -l /tmp/workspace/code-with-quarkus"
                     sh "echo $HOME"
                     sh "ls -l $HOME/.m2"
                     sh "mvn -U -B package -s ${MAVEN_SETTINGS}"
