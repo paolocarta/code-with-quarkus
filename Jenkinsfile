@@ -4,7 +4,7 @@ pipeline {
 
     parameters {
 
-        booleanParam(defaultValue: false,description: 'Deploy to Prod Environment ?', name: 'DEPLOY_PROD')
+        booleanParam(defaultValue: false,description: 'Deploy to Staging Environment ?', name: 'DEPLOY_STAGING')
         
         string(defaultValue: "maven-settings-general", description: 'Maven Settings File Id', name: 'MAVEN_SETTINGS_ID')
         string(defaultValue: "http://ccg.internal.com/nexus", description: 'Nexus URL', name: 'NEXUS_URL')
@@ -49,10 +49,9 @@ pipeline {
 
             steps {
                 script {
-                        // notifyBuild('STARTED')
-                        echo "Build number: ${BUILD_NUMBER} - Build id: ${env.BUILD_ID} on Jenkins instance: ${env.JENKINS_URL}"
+                        echo "Build number: ${BUILD_NUMBER} - Build id: ${env.BUILD_ID} started from Jenkins instance: ${env.JENKINS_URL}"
 
-                        echo "Deploy to QA? :: ${params.DEPLOY_QA}"
+                        echo "Deploy to Staging? :: ${params.DEPLOY_STAGING}"
 
                         echo "Maven Settings file id? :: ${params.MAVEN_SETTINGS_ID}"
                         echo "NEXUS URL? :: ${params.NEXUS_URL}"
