@@ -39,3 +39,5 @@ spec:
     persistentVolumeClaim:
       claimName: "source-code"
       readOnly: false
+
+# ${computer.jnlpmac} ${computer.name}

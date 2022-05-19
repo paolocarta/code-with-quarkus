@@ -65,21 +65,12 @@ pipeline {
 
             agent { 
                 kubernetes {
-                    label 'maven-ppc64le'
+                    // label 'maven-ppc64le'
                     cloud 'openshift-power-enxctmiapp'
-                    // yamlFile 'pod-template-mvn-persistency.yaml'
+                    yamlFile 'pod-template-mvn-persistency.yaml'
 
                 }
             }
-
-            // podTemplate(cloud: 'openshift-power-enxctmiapp', label: 'maven-ppc64le' yamlFile: readTrusted('pod-template-buildah.yaml')) {
-                
-            //     node('maven-ppc64le') {
-            //         container('maven'){
-            //             sh 'echo hello'
-            //         }  
-            //     }
-            // }
 
             steps {
 
@@ -96,8 +87,6 @@ pipeline {
         }
 
         stage('Image Build') {
-
-            // agent { label 'buildah-x86' }
 
             agent {
                 kubernetes {
@@ -117,7 +106,7 @@ pipeline {
             }
 
             // when {
-            //     // fake condition for now
+            //     // dummy condition for now
             //     branch 'master' 
             // }
 
@@ -142,7 +131,6 @@ pipeline {
 
         stage('Image Push') {
 
-            // agent { label 'buildah-x86' }
             agent {
                 kubernetes {
                     yamlFile 'pod-template-buildah.yaml'
@@ -168,14 +156,6 @@ pipeline {
                     }
                 }            
             }
-
-            // post {
-
-            //     always {
-                    
-            //     }
-                
-            // }
         }
 
         stage('Update GitOps Repo') {
