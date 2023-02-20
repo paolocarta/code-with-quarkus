@@ -65,8 +65,8 @@ pipeline {
 
             agent { 
                 kubernetes {
-                    // label 'maven-ppc64le'
-                    cloud 'openshift-power-enxctmiapp'
+                    // label 'maven'
+                    cloud 'kubernetes'
                     yamlFile 'pod-template-mvn-persistency.yaml'
 
                 }
@@ -91,7 +91,7 @@ pipeline {
             agent {
                 kubernetes {
                     yamlFile 'pod-template-buildah.yaml'
-                    cloud 'openshift-power-enxctmiapp'
+                    cloud 'kubernetes'
                 }
             }
 
@@ -99,11 +99,11 @@ pipeline {
                 skipDefaultCheckout true
             }
 
-            environment {
+            // environment {
 
-                HTTP_PROXY        = 'http://10.0.30.114:8080'
-                HTTPS_PROXY       = 'http://10.0.30.114:8080'
-            }
+            //     HTTP_PROXY        = 'http://10.0.30.114:8080'
+            //     HTTPS_PROXY       = 'http://10.0.30.114:8080'
+            // }
 
             // when {
             //     // dummy condition for now
@@ -134,7 +134,7 @@ pipeline {
             agent {
                 kubernetes {
                     yamlFile 'pod-template-buildah.yaml'
-                    cloud 'openshift-power-enxctmiapp'
+                    cloud 'kubernetes'
                 }
             }
 

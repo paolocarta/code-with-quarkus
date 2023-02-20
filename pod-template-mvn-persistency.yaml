@@ -3,15 +3,10 @@ kind: "Pod"
 metadata:
   labels:
     jenkins: "slave"
-    jenkins/label: "maven-ppc64le"
+    jenkins/label: "maven"
 spec:
   containers:
-  - env:
-      - name: CURL_CA_BUNDLE
-        value: /var/certs/ca-bundle.crt
-      - name: JAVA_FIPS_OPTIONS
-        value: "-Dcom.redhat.fips=false -Djavax.net.ssl.trustStore=/var/certs/java/cacerts -Djavax.net.ssl.trustStorePassword=changeit"
-    image: "image-registry.openshift-image-registry.svc:5000/openshift/jenkins-agent-maven:latest"
+  - image: "jenkins-agent-maven:latest"
     imagePullPolicy: "Always"
     name: "jnlp"
     resources:
@@ -26,11 +21,7 @@ spec:
       readOnly: false
     - mountPath: "/tmp"
       name: "source-code"
-      readOnly: false
-    - name: "volume-ca-bundle"
-      mountPath: "/var/certs/"      
-    - name: "volume-cacerts"
-      mountPath: "/var/certs/java"     
+      readOnly: false  
     workingDir: "/tmp"
   nodeSelector:
     kubernetes.io/os: "linux"
@@ -45,11 +36,3 @@ spec:
     persistentVolumeClaim:
       claimName: "source-code"
       readOnly: false
-  - name: volume-ca-bundle
-    configMap:
-      name: ca-bundle
-  - name: volume-cacerts
-    configMap:
-      name: java-keystore
-
-# ${computer.jnlpmac} ${computer.name}
