@@ -81,6 +81,8 @@ pipeline {
                         // sh "ls -l /tmp/workspace"
                         sh "echo $HOME"
                         sh "ls -l $HOME/.m2"
+                        sh "ls -l $HOME/agent/"
+                        sh "mvn help:evaluate -Dexpression=settings.localRepository"
                         sh "mvn -U -B package"
                     // }
                 }       
