@@ -15,7 +15,7 @@ spec:
       limits: {}
       requests: {}
     securityContext:
-      privileged: true
+      privileged: false
     tty: true
     volumeMounts:
     - mountPath: "/home/jenkins/.m2"
