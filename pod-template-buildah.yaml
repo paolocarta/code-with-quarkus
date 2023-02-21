@@ -44,7 +44,7 @@ spec:
   nodeSelector:
     kubernetes.io/os: "linux"
   restartPolicy: "Never"
-  serviceAccountName: "jenkins-agent"
+  serviceAccountName: "jenkins"
   volumes:
   - name: "container-layers-volume"
     persistentVolumeClaim:

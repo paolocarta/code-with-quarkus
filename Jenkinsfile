@@ -67,7 +67,7 @@ pipeline {
                 kubernetes {
                     // label 'maven'
                     cloud 'kubernetes'
-                    yamlFile 'pod-template-mvn-persistency.yaml'
+                    yamlFile 'pod-template-mvn.yaml'
 
                 }
             }
@@ -86,77 +86,77 @@ pipeline {
             }
         }
 
-        stage('Image Build') {
+        // stage('Image Build') {
 
-            agent {
-                kubernetes {
-                    yamlFile 'pod-template-buildah.yaml'
-                    cloud 'kubernetes'
-                }
-            }
+        //     agent {
+        //         kubernetes {
+        //             yamlFile 'pod-template-buildah.yaml'
+        //             cloud 'kubernetes'
+        //         }
+        //     } 
 
-            options {
-                skipDefaultCheckout true
-            }
+        //     options {
+        //         skipDefaultCheckout true
+        //     }
 
-            // environment {
+        //     // environment {
 
-            //     HTTP_PROXY        = 'http://10.0.30.114:8080'
-            //     HTTPS_PROXY       = 'http://10.0.30.114:8080'
-            // }
+        //     //     HTTP_PROXY        = 'http://10.0.30.114:8080'
+        //     //     HTTPS_PROXY       = 'http://10.0.30.114:8080'
+        //     // }
 
-            // when {
-            //     // dummy condition for now
-            //     branch 'master' 
-            // }
+        //     // when {
+        //     //     // dummy condition for now
+        //     //     branch 'master' 
+        //     // }
 
-            steps {
-                container('buildah') {
-                    sh "pwd"
-                    sh "id"
-                    sh "echo $HOME"
-                    sh "ls -l /tmp/workspace/code-with-quarkus/target"
+        //     steps {
+        //         container('buildah') {
+        //             sh "pwd"
+        //             sh "id"
+        //             sh "echo $HOME"
+        //             sh "ls -l /tmp/workspace/code-with-quarkus/target"
 
-                    // --build-arg=HTTP_PROXY="http://10.0.30.114:8080"
-                    // --build-arg=HTTPS_PROXY="http://10.0.30.114:8080"
+        //             // --build-arg=HTTP_PROXY="http://10.0.30.114:8080"
+        //             // --build-arg=HTTPS_PROXY="http://10.0.30.114:8080"
 
-                    sh "buildah --storage-driver=vfs bud --format=oci \
-                            --tls-verify=true --no-cache \
-                            -f ./src/main/docker/Dockerfile.jvm \
-                            -t image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:${BUILD_NUMBER} ."
+        //             sh "buildah --storage-driver=vfs bud --format=oci \
+        //                     --tls-verify=true --no-cache \
+        //                     -f ./src/main/docker/Dockerfile.jvm \
+        //                     -t image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:${BUILD_NUMBER} ."
 
-                }            
-            }
-        }
+        //         }            
+        //     }
+        // }
 
-        stage('Image Push') {
+        // stage('Image Push') {
 
-            agent {
-                kubernetes {
-                    yamlFile 'pod-template-buildah.yaml'
-                    cloud 'kubernetes'
-                }
-            }
+        //     agent {
+        //         kubernetes {
+        //             yamlFile 'pod-template-buildah.yaml'
+        //             cloud 'kubernetes'
+        //         }
+        //     }
 
-            options {
-                skipDefaultCheckout true
-            }
+        //     options {
+        //         skipDefaultCheckout true
+        //     }
 
-            steps {
-                container('buildah') {
-                    sh "pwd"
-                    sh "id"
+        //     steps {
+        //         container('buildah') {
+        //             sh "pwd"
+        //             sh "id"
 
-                    withCredentials([string(credentialsId: 'jenkins-sa-token-power-mi', variable: 'TOKEN')]) {
+        //             withCredentials([string(credentialsId: 'jenkins-sa-token-power-mi', variable: 'TOKEN')]) {
                         
-                        sh "buildah --storage-driver=vfs push --tls-verify=false \
-                            --creds jenkins:${TOKEN} \
-                            image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:${BUILD_NUMBER} \
-                            docker://image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:${BUILD_NUMBER}"    
-                    }
-                }            
-            }
-        }
+        //                 sh "buildah --storage-driver=vfs push --tls-verify=false \
+        //                     --creds jenkins:${TOKEN} \
+        //                     image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:${BUILD_NUMBER} \
+        //                     docker://image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:${BUILD_NUMBER}"    
+        //             }
+        //         }            
+        //     }
+        // }
 
         stage('Update GitOps Repo') {
             
