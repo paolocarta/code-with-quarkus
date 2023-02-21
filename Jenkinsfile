@@ -80,7 +80,7 @@ pipeline {
                         sh "id"
                         // sh "ls -l /tmp/workspace"
                         sh "echo $HOME"
-                        sh "ls -l root/.m2"
+                        sh "ls -l /root/.m2"
                         sh "mvn -U -B package"
                     // }
                 }       
