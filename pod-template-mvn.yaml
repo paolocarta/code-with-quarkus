@@ -18,7 +18,7 @@ spec:
       privileged: false
     tty: true
     volumeMounts:
-    - mountPath: "/home/jenkins/.m2"
+    - mountPath: "/root/.m2"
       name: "maven-cache"
       readOnly: false
   restartPolicy: "Never"
