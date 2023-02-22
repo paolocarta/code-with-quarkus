@@ -25,5 +25,5 @@ spec:
   volumes:
   - name: "maven-cache"
     persistentVolumeClaim:
-      claimName: "maven-cache"
+      claimName: "nfs"
       readOnly: false
