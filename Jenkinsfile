@@ -123,7 +123,7 @@ pipeline {
                     //     env.SERVICE_NAME = serviceName
                     // }
                                         
-                    sh "/kaniko/executor --dockerfile ./Dockerfile --context . \
+                    sh "/kaniko/executor --dockerfile ./src/main/docker/Dockerfile.jvm --context . \
                     --destination=gcr.io/paolos-playground-323415/code-with-quarkus:${BUILD_NUMBER} \
                     --destination=gcr.io/paolos-playground-323415/code-with-quarkus:${GIT_COMMIT}"
 
