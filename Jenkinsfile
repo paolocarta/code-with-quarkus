@@ -88,7 +88,7 @@ pipeline {
             }
         }
 
-        stage('Image Build') {
+        stage('Image Build and Push') {
 
             agent {
                 kubernetes {
@@ -131,45 +131,55 @@ pipeline {
             }
         }
 
-        // stage('Image Push') {
-
-        //     agent {
-        //         kubernetes {
-        //             yamlFile 'pod-template-buildah.yaml'
-        //             cloud 'kubernetes'
-        //         }
+        // stage('Update GitOps Repo - Deploy to testing env') {
+            
+        //     when {
+        //         beforeAgent true
+        //         branch 'master'
         //     }
 
         //     options {
         //         skipDefaultCheckout true
         //     }
-
+            
         //     steps {
-        //         container('buildah') {
-        //             sh "pwd"
-        //             sh "id"
 
-        //             withCredentials([string(credentialsId: 'jenkins-sa-token-power-mi', variable: 'TOKEN')]) {
+        //         container('jnlp') { 
+        //             sh "pwd"
+                    
+        //             withCredentials([usernamePassword(credentialsId: 'id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         
-        //                 sh "buildah --storage-driver=vfs push --tls-verify=false \
-        //                     --creds jenkins:${TOKEN} \
-        //                     image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:${BUILD_NUMBER} \
-        //                     docker://image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:${BUILD_NUMBER}"    
+        //                 sh "rm -rf eu-gitops"
+        //                 sh "git clone http://$USERNAME:$PASSWORD@ip-address:port/repo.git" 
         //             }
-        //         }            
+
+        //             sh "ls -l"
+        //         }
+
+        //         container('jnlp') { 
+        //             dir('folder/service') {
+
+        //                 // sh "kustomize edit set image ${SERVICE_NAME}:${BUILD_NUMBER}"
+
+        //                 sh "cat deploy.yaml"
+        //                 sh "sed -i 's+cicd/code-with-quarkus.*+cicd/code-with-quarkus:${BUILD_NUMBER}+g' deploy.yaml"
+        //                 sh "cat deploy.yaml"                      
+        //             }
+        //         }
+
+        //         container('jnlp') {
+        //             withCredentials([usernamePassword(credentialsId: 'id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+
+        //                 sh "git config user.email \"jenkins-bot@gmail.com\""
+        //                 sh "git config user.name \"Jenkins Bot\""
+
+        //                 sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
+        //                 sh "git push http://$USERNAME:$PASSWORD@ip-address:port/repo.git"             
+
+        //             }
+        //         }
         //     }
         // }
-
-        stage('Update GitOps Repo') {
-            
-            // when {
-            //     branch 'master'
-            // }
-            
-            steps {
-               sh "echo updating gitops repo" 
-            }
-        }
 
     }
 
