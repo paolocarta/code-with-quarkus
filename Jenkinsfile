@@ -92,7 +92,7 @@ pipeline {
 
             agent {
                 kubernetes {
-                    yamlFile 'pod-template-buildah.yaml'
+                    yamlFile 'pod-template-kaniko.yaml'
                     cloud 'kubernetes'
                 }
             } 
@@ -112,21 +112,20 @@ pipeline {
             // }
 
             steps {
-                container('builder') {
+                container('kaniko') {
                     sh "pwd"
                     sh "id"
                     sh "echo $HOME"
 
-
-                    script {
-                        def jobName = env.JOB_NAME
-                        def serviceName = jobName.split("/")[0]
-                        env.SERVICE_NAME = serviceName
-                    }
+                    // script {
+                    //     def jobName = env.JOB_NAME
+                    //     def serviceName = jobName.split("/")[0]
+                    //     env.SERVICE_NAME = serviceName
+                    // }
                                         
-                    sh "/kaniko/executor --dockerfile `pwd`/Dockerfile --context `pwd` --destination=AWSACCOUNT.dkr.ecr.eu-west-1.amazonaws.com/app:${env.BUILD_ID}"
-                    
-
+                    sh "/kaniko/executor --dockerfile ./Dockerfile --context . \
+                    --destination=gcr.io/paolos-playground-323415/code-with-quarkus:${BUILD_NUMBER} \
+                    --destination=gcr.io/paolos-playground-323415/code-with-quarkus:${GIT_COMMIT}"
 
                 }            
             }

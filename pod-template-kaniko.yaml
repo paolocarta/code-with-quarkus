@@ -5,7 +5,7 @@ metadata:
     jenkins/label: "kaniko"
 spec:
   containers:
-  - name: builder
+  - name: kaniko
     image: gcr.io/kaniko-project/executor:v1.9.1
     imagePullPolicy: IfNotPresent
     command:
