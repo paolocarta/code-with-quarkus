@@ -27,20 +27,6 @@ spec:
       name: "source-code-volume"
       readOnly: false
     workingDir: "/tmp"
-  - image: "jenkins-agent-base:latest"
-    imagePullPolicy: "Always"
-    name: "jnlp"
-    tty: false
-    securityContext:
-      privileged: true
-    volumeMounts:
-    - mountPath: "/var/lib/containers"
-      name: "container-layers-volume"
-      readOnly: false
-    - mountPath: "/tmp"
-      name: "source-code-volume"
-      readOnly: false
-    workingDir: "/tmp"
   nodeSelector:
     kubernetes.io/os: "linux"
   restartPolicy: "Never"
@@ -49,8 +35,4 @@ spec:
   - name: "container-layers-volume"
     persistentVolumeClaim:
       claimName: "container-layers"
-      readOnly: false
-  - name: "source-code-volume"
-    persistentVolumeClaim:
-      claimName: "source-code"
       readOnly: false

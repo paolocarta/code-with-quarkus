@@ -23,7 +23,7 @@ pipeline {
         buildDiscarder logRotator(daysToKeepStr: '30', numToKeepStr: '45')
         
         // disable concurrent builds and disable build resume
-        // disableConcurrentBuilds()
+        disableConcurrentBuilds()
         // disableResume()
 
         // timeout on whole pipeline job
@@ -88,48 +88,49 @@ pipeline {
             }
         }
 
-        // stage('Image Build') {
+        stage('Image Build') {
 
-        //     agent {
-        //         kubernetes {
-        //             yamlFile 'pod-template-buildah.yaml'
-        //             cloud 'kubernetes'
-        //         }
-        //     } 
+            agent {
+                kubernetes {
+                    yamlFile 'pod-template-buildah.yaml'
+                    cloud 'kubernetes'
+                }
+            } 
 
-        //     options {
-        //         skipDefaultCheckout true
-        //     }
+            when {
+                beforeAgent true
+                branch 'test'
+            }
 
-        //     // environment {
+            options {
+                skipDefaultCheckout true
+            }
 
-        //     //     HTTP_PROXY        = 'http://10.0.30.114:8080'
-        //     //     HTTPS_PROXY       = 'http://10.0.30.114:8080'
-        //     // }
+            // environment {
+            //     HTTP_PROXY        = ''
+            //     HTTPS_PROXY       = ''
+            // }
 
-        //     // when {
-        //     //     // dummy condition for now
-        //     //     branch 'master' 
-        //     // }
+            steps {
+                container('builder') {
+                    sh "pwd"
+                    sh "id"
+                    sh "echo $HOME"
 
-        //     steps {
-        //         container('buildah') {
-        //             sh "pwd"
-        //             sh "id"
-        //             sh "echo $HOME"
-        //             sh "ls -l /tmp/workspace/code-with-quarkus/target"
 
-        //             // --build-arg=HTTP_PROXY="http://10.0.30.114:8080"
-        //             // --build-arg=HTTPS_PROXY="http://10.0.30.114:8080"
+                    script {
+                        def jobName = env.JOB_NAME
+                        def serviceName = jobName.split("/")[0]
+                        env.SERVICE_NAME = serviceName
+                    }
+                                        
+                    sh "/kaniko/executor --dockerfile `pwd`/Dockerfile --context `pwd` --destination=AWSACCOUNT.dkr.ecr.eu-west-1.amazonaws.com/app:${env.BUILD_ID}"
+                    
 
-        //             sh "buildah --storage-driver=vfs bud --format=oci \
-        //                     --tls-verify=true --no-cache \
-        //                     -f ./src/main/docker/Dockerfile.jvm \
-        //                     -t image-registry.openshift-image-registry.svc:5000/${CI_CD_NAMESPACE}/${JOB_NAME}:${BUILD_NUMBER} ."
 
-        //         }            
-        //     }
-        // }
+                }            
+            }
+        }
 
         // stage('Image Push') {
 

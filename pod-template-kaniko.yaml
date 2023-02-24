@@ -1,0 +1,23 @@
+kind: Pod
+metadata:
+  labels:
+    jenkins: "slave"
+    jenkins/label: "kaniko"
+spec:
+  containers:
+  - name: builder
+    image: gcr.io/kaniko-project/executor:v1.9.1
+    imagePullPolicy: IfNotPresent
+    command:
+    - /busybox/cat
+    tty: true
+    env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: /secret/kaniko-secret.json
+    volumeMounts:
+      - name: registry-auth-config
+        mountPath: /secret
+  volumes:
+    - name: registry-auth-config
+      secret:
+        name: registry-auth-config
