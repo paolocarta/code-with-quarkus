@@ -20,4 +20,4 @@ spec:
   volumes:
     - name: registry-auth-config
       secret:
-        name: registry-auth-config
+        secretName: registry-auth-config
