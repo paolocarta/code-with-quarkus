@@ -7,9 +7,9 @@ spec:
   containers:
   - name: kaniko
     image: gcr.io/kaniko-project/executor:v1.9.1
-    imagePullPolicy: IfNotPresent
+    # imagePullPolicy: IfNotPresent
     command:
-    - /busybox/cat
+    - cat
     tty: true
     env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
