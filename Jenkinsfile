@@ -99,7 +99,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'test'
+                branch 'master'
             }
 
             options {
