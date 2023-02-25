@@ -68,6 +68,7 @@ pipeline {
                     // label 'maven'
                     cloud 'kubernetes'
                     yamlFile 'pod-template-mvn.yaml'
+                    // workspaceVolume persistentVolumeClaimWorkspaceVolume(claimName: 'workspace', readOnly: false)
 
                 }
             }
@@ -94,6 +95,7 @@ pipeline {
                 kubernetes {
                     yamlFile 'pod-template-kaniko.yaml'
                     cloud 'kubernetes'
+                    // workspaceVolume persistentVolumeClaimWorkspaceVolume(claimName: 'workspace', readOnly: false)
                 }
             } 
 
@@ -152,8 +154,8 @@ pipeline {
                     
         //             withCredentials([usernamePassword(credentialsId: 'id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         
-        //                 sh "rm -rf eu-gitops"
-        //                 sh "git clone http://$USERNAME:$PASSWORD@ip-address:port/repo.git" 
+        //                 sh "rm -rf your-repo"
+        //                 sh "git clone repo" 
         //             }
 
         //             sh "ls -l"
@@ -177,7 +179,7 @@ pipeline {
         //                 sh "git config user.name \"Jenkins Bot\""
 
         //                 sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
-        //                 sh "git push http://$USERNAME:$PASSWORD@ip-address:port/repo.git"             
+        //                 sh "git push repo.git"             
 
         //             }
         //         }
