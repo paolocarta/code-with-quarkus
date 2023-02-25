@@ -21,9 +21,16 @@ spec:
     - mountPath: "/root/.m2"
       name: "maven-cache"
       readOnly: false
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace"
+      readOnly: false
   restartPolicy: "Never"
   volumes:
   - name: "maven-cache"
     persistentVolumeClaim:
       claimName: "nfs"
+      readOnly: false
+  - name: "workspace"
+    persistentVolumeClaim:
+      claimName: "workspace"
       readOnly: false
