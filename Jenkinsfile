@@ -125,7 +125,7 @@ pipeline {
                     // }
                                         
                     sh "/kaniko/executor \
-                        --context=dir://$HOME/agent/workspace/bernetes-example-pipeline_master \
+                        --context=dir://$HOME/agent/workspace/bernetes-example-pipeline_master/ \
                         --dockerfile=Dockerfile.jvm  \
                         --destination=gcr.io/paolos-playground-323415/code-with-quarkus:${BUILD_NUMBER} \
                         --destination=gcr.io/paolos-playground-323415/code-with-quarkus:${GIT_COMMIT}"
