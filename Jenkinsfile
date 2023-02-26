@@ -68,7 +68,7 @@ pipeline {
                     // label 'maven'
                     cloud 'kubernetes'
                     yamlFile 'pod-template-mvn.yaml'
-                    // workspaceVolume persistentVolumeClaimWorkspaceVolume(claimName: 'workspace', readOnly: false)
+                    workspaceVolume persistentVolumeClaimWorkspaceVolume(claimName: 'workspace', readOnly: false)
 
                 }
             }
@@ -95,7 +95,7 @@ pipeline {
                 kubernetes {
                     yamlFile 'pod-template-kaniko.yaml'
                     cloud 'kubernetes'
-                    // workspaceVolume persistentVolumeClaimWorkspaceVolume(claimName: 'workspace', readOnly: false)
+                    workspaceVolume persistentVolumeClaimWorkspaceVolume(claimName: 'workspace', readOnly: false)
                 }
             } 
 
