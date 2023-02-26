@@ -1,6 +1,7 @@
 apiVersion: "v1"
 kind: "Pod"
 metadata:
+  # name: test-maven
   labels:
     jenkins: "slave"
     jenkins/label: "maven"
@@ -15,7 +16,7 @@ spec:
       limits: {}
       requests: {}
     securityContext:
-      privileged: false
+      privileged: true
     tty: true
     volumeMounts:
     - mountPath: "/root/.m2"
