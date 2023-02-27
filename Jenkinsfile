@@ -79,7 +79,7 @@ pipeline {
                         
                         sh "pwd"
                         sh "id"
-                        // sh "ls -l /tmp/workspace"
+                        sh "ls -l /home/jenkins/agent/workspace"
                         sh "echo $HOME"
                         sh "ls -l /root/.m2"
                         sh "mvn -U -B package"
@@ -120,17 +120,17 @@ pipeline {
                     sh "id"
                     sh "echo $HOME"
 
-                    // script {
-                    //     def jobName = env.JOB_NAME
-                    //     def serviceName = jobName.split("/")[0]
-                    //     env.SERVICE_NAME = serviceName
-                    // }
+                    script {
+                        def jobName = env.JOB_NAME
+                        def serviceName = jobName.split("/")[0]
+                        env.SERVICE_NAME = serviceName
+                    }
                                         
                     sh "/kaniko/executor \
-                        --context=dir://$HOME/agent/workspace/bernetes-example-pipeline_master/ \
+                        --context=dir://$HOME/agent/workspace/${SERVICE_NAME}/ \
                         --dockerfile=Dockerfile.jvm  \
-                        --destination=gcr.io/paolos-playground-323415/code-with-quarkus:${BUILD_NUMBER} \
-                        --destination=gcr.io/paolos-playground-323415/code-with-quarkus:${GIT_COMMIT}"
+                        --destination=gcr.io/paolos-playground-323415/${SERVICE_NAME}:${BUILD_NUMBER} \
+                        --destination=gcr.io/paolos-playground-323415/${SERVICE_NAME}:${GIT_COMMIT}"
 
                 }            
             }
@@ -195,7 +195,7 @@ pipeline {
 
             // node('maven') { 
             //     // sh 'ls -l /tmp/workspace'
-            //     // sh 'rm -rf /tmp/workspace/code-with-quarkus'
+            //     // sh 'rm -rf /tmp/workspace/${SERVICE_NAME}'
             // }
 
             // cleanWs()
