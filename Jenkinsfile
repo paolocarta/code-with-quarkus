@@ -127,8 +127,7 @@ pipeline {
                     }
                                         
                     sh "/kaniko/executor \
-                        --context=dir://$HOME/agent/workspace/${SERVICE_NAME}/ \
-                        --dockerfile=Dockerfile.jvm  \
+                        --context=dir://$PWD/ --dockerfile=Dockerfile.jvm  \
                         --destination=gcr.io/paolos-playground-323415/${SERVICE_NAME}:${BUILD_NUMBER} \
                         --destination=gcr.io/paolos-playground-323415/${SERVICE_NAME}:${GIT_COMMIT}"
 
