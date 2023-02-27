@@ -26,6 +26,9 @@ spec:
     #   name: "workspace"
     #   readOnly: false
   restartPolicy: "Never"
+  securityContext:
+    runAsUser: 1000
+    fsGroup: 1000
   volumes:
   - name: "maven-cache"
     persistentVolumeClaim:
