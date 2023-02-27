@@ -1,11 +1,18 @@
 apiVersion: "v1"
 kind: "Pod"
 metadata:
-  # name: test-maven
+  name: test-maven
   labels:
     jenkins: "slave"
     jenkins/label: "maven"
 spec:
+  initContainers:
+  - name: initcontainer
+    image: alpine:latest
+    command: ['sh', '-c', 'chown 0:1000 /home/jenkins/agent']
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
   containers:
   - image: "maven:3.9.0-eclipse-temurin-11"
     imagePullPolicy: "Always"
@@ -15,8 +22,6 @@ spec:
     resources:
       limits: {}
       requests: {}
-    securityContext:
-      privileged: true
     tty: true
     volumeMounts:
     - mountPath: "/root/.m2"
@@ -26,9 +31,9 @@ spec:
     #   name: "workspace"
     #   readOnly: false
   restartPolicy: "Never"
-  securityContext:
-    runAsUser: 1000
-    fsGroup: 1000
+  # securityContext:
+  #   runAsUser: 1000
+  #   fsGroup: 2000
   volumes:
   - name: "maven-cache"
     persistentVolumeClaim:
