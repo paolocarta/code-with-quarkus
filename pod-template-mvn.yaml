@@ -9,7 +9,7 @@ spec:
   initContainers:
   - name: initcontainer
     image: alpine:latest
-    command: ['sh', '-c', 'chown 0:1000 /home/jenkins/agent']
+    command: ['sh', '-c', 'chown 1000:1000 /home/jenkins/agent']
     volumeMounts:
     - mountPath: "/home/jenkins/agent"
       name: "workspace-volume"
