@@ -51,7 +51,7 @@ pipeline {
                 script {
                         echo "Build number: ${BUILD_NUMBER} - Build id: ${env.BUILD_ID} started from Jenkins instance: ${env.JENKINS_URL}"
 
-                        echo "Deploy to Staging? :: ${params.DEPLOY_STAGING}"
+                        // echo "Deploy to Staging? :: ${params.DEPLOY_STAGING}"
 
                         echo "Maven Settings file id? :: ${params.MAVEN_SETTINGS_ID}"
                         echo "NEXUS URL? :: ${params.NEXUS_URL}"
@@ -82,6 +82,7 @@ pipeline {
                         sh "ls -l /home/jenkins/agent/workspace"
                         sh "echo $HOME"
                         sh "ls -l /root/.m2"
+
                         sh "mvn -U -B package"
                     // }
                 }       
@@ -125,6 +126,8 @@ pipeline {
                         def serviceName = jobName.split("/")[0]
                         env.SERVICE_NAME = serviceName
                     }
+
+                    sh "printenv | sort"
                                         
                     sh "/kaniko/executor \
                         --context=dir://$PWD/ --dockerfile=Dockerfile.jvm  \
