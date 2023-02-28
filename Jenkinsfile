@@ -4,10 +4,10 @@ pipeline {
 
     parameters {
 
-        booleanParam(defaultValue: false,description: 'Deploy to Staging Environment ?', name: 'DEPLOY_STAGING')
+        booleanParam(defaultValue: true,description: 'Deploy to Staging Environment ?', name: 'DEPLOY_STAGING')
         
         string(defaultValue: "maven-settings-general", description: 'Maven Settings File Id', name: 'MAVEN_SETTINGS_ID')
-        string(defaultValue: "http://ccg.internal.com/nexus", description: 'Nexus URL', name: 'NEXUS_URL')
+        string(defaultValue: "http://my-domain.com/nexus", description: 'Nexus URL', name: 'NEXUS_URL')
         string(defaultValue: "artifacts", description: 'Nexus hosted repo name', name: 'NEXUS_HOSTED_NAME_RELEASES')
         string(defaultValue: "artifacts-snapshots", description: 'Nexus hosted snapshots repo name', name: 'NEXUS_HOSTED_NAME_SNAPSHOTS')
         
@@ -36,7 +36,7 @@ pipeline {
 
     environment {
 
-        CI_CD_NAMESPACE   = 'cicd'
+        CI_CD_NAMESPACE   = 'jenkins'
     }
   
     stages {
@@ -120,20 +120,19 @@ pipeline {
                     sh "ls -l"
                     sh "id"
                     sh "echo $HOME"
+                    sh "echo $WORKSPACE"
 
                     script {
                         def jobName = env.JOB_NAME
                         def serviceName = jobName.split("/")[0]
                         env.SERVICE_NAME = serviceName
                     }
-
-                    sh "printenv | sort"
-                    sh "echo $WORKSPACE"
                                         
                     sh "/kaniko/executor \
                         --context=dir://$WORKSPACE --dockerfile=Dockerfile.jvm  \
                         --destination=gcr.io/paolos-playground-323415/${SERVICE_NAME}:${BUILD_NUMBER} \
-                        --destination=gcr.io/paolos-playground-323415/${SERVICE_NAME}:${GIT_COMMIT}"
+                        --destination=gcr.io/paolos-playground-323415/${SERVICE_NAME}:${GIT_COMMIT} \
+                        --cache" 
 
                 }            
             }
