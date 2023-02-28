@@ -128,9 +128,10 @@ pipeline {
                     }
 
                     sh "printenv | sort"
+                    sh "echo $WORKSPACE"
                                         
                     sh "/kaniko/executor \
-                        --context=dir://$PWD/ --dockerfile=Dockerfile.jvm  \
+                        --context=dir://$WORKSPACE --dockerfile=Dockerfile.jvm  \
                         --destination=gcr.io/paolos-playground-323415/${SERVICE_NAME}:${BUILD_NUMBER} \
                         --destination=gcr.io/paolos-playground-323415/${SERVICE_NAME}:${GIT_COMMIT}"
 
