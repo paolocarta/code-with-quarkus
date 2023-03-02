@@ -30,9 +30,11 @@ pipeline {
         timeout(time: 1, unit: 'HOURS')
     }
     
-    triggers {
-        pollSCM "*/1 * * * *"
-    }
+    // triggers {
+    //     // cron('H */4 * * 1-5')
+    //     // pollSCM "*/5 * * * *"
+        
+    // }
 
     environment {
 
