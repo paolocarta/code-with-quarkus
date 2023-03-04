@@ -32,8 +32,7 @@ pipeline {
     
     // triggers {
     //     // cron('H */4 * * 1-5')
-    //     // pollSCM "*/5 * * * *"
-        
+    //     // pollSCM "*/5 * * * *"        
     // }
 
     environment {
@@ -139,6 +138,44 @@ pipeline {
                 }            
             }
         }
+
+        stage('Deploy') {
+
+            agent {
+                kubernetes {
+                    yamlFile 'pod-template-xyz.yaml'
+                    cloud 'kubernetes'
+                }
+            } 
+
+            when {
+                beforeAgent true
+                branch 'test'
+            }
+
+            options {
+                skipDefaultCheckout true
+            }
+
+            steps {
+                container('kaniko') {
+                    sh "pwd"
+                    sh "ls -l"
+                    sh "id"
+                    sh "echo $HOME"
+                    sh "echo $WORKSPACE"
+
+                    withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'dev-cluster', namespace: 'my-ns', serverUrl: 'https://192.168.10.10:6443']]) {
+
+
+                        // some block
+                    }
+
+                }            
+            }
+        }
+
+
 
         // stage('Update GitOps Repo - Deploy to testing env') {
             
