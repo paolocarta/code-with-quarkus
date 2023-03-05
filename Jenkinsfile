@@ -173,7 +173,7 @@ pipeline {
                     // clone manifest repo
                     sh ""
                     // connect to gke cluster
-                    sh "gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE""
+                    sh "gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE"
 
                     withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'dev-cluster', namespace: 'my-ns', serverUrl: 'https://192.168.10.10:6443']]) {
                         // sh """       
