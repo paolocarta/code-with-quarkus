@@ -176,11 +176,11 @@ pipeline {
                     sh "gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE""
 
                     withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'dev-cluster', namespace: 'my-ns', serverUrl: 'https://192.168.10.10:6443']]) {
-                        sh """       
-                            kustomize edit set image gcr.io/PROJECT_ID/IMAGE=gcr.io/$PROJECT_ID/$IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA
-                            kustomize build . | kubectl apply -f -
-                            kubectl rollout status deployment $IMAGE
-                        """
+                        // sh """       
+                        //     kustomize edit set image 
+                        //     kustomize build . | kubectl apply -f -
+                        //     kubectl rollout status deployment $IMAGE
+                        // """
                     }
 
                 }            
