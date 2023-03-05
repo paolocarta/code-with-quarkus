@@ -1,0 +1,23 @@
+kind: Pod
+metadata:
+  labels:
+    jenkins: "slave"
+    jenkins/label: "kaniko"
+spec:
+  containers:
+  - name: kaniko
+    image: 
+    imagePullPolicy: IfNotPresent
+    command:
+    - cat
+    tty: true
+    env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: /secret/jenkins-gcr-push-sa-private-key.json
+    volumeMounts:
+      - name: registry-auth-config
+        mountPath: /secret
+  volumes:
+    - name: registry-auth-config
+      secret:
+        secretName: registry-auth-config
