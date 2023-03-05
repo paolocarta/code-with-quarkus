@@ -143,7 +143,7 @@ pipeline {
 
             agent {
                 kubernetes {
-                    yamlFile 'pod-template-xyz.yaml'
+                    yamlFile 'pod-template-kikd.yaml'
                     cloud 'kubernetes'
                 }
             } 
@@ -157,18 +157,30 @@ pipeline {
                 skipDefaultCheckout true
             }
 
+            environment {
+                GKE_CLUSTER = ""
+                GKE_ZONE    = ""
+            }
+
             steps {
-                container('kaniko') {
+                container('kikd') {
                     sh "pwd"
                     sh "ls -l"
                     sh "id"
                     sh "echo $HOME"
                     sh "echo $WORKSPACE"
 
+                    // clone manifest repo
+                    sh ""
+                    // connect to gke cluster
+                    sh "gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE""
+
                     withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'dev-cluster', namespace: 'my-ns', serverUrl: 'https://192.168.10.10:6443']]) {
-
-
-                        // some block
+                        sh """       
+                            kustomize edit set image gcr.io/PROJECT_ID/IMAGE=gcr.io/$PROJECT_ID/$IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA
+                            kustomize build . | kubectl apply -f -
+                            kubectl rollout status deployment $IMAGE
+                        """
                     }
 
                 }            
