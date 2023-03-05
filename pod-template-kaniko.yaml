@@ -6,9 +6,8 @@ metadata:
 spec:
   containers:
   - name: kaniko
-    image: gcr.io/kaniko-project/executor:debug
-    # image: gcr.io/kaniko-project/executor:v1.9.1
-    # imagePullPolicy: IfNotPresent
+    image: gcr.io/kaniko-project/executor:v1.9.1
+    imagePullPolicy: IfNotPresent
     command:
     - cat
     tty: true
