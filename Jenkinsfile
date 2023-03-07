@@ -150,7 +150,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'test'
+                branch 'master'
             }
 
             options {
@@ -168,8 +168,6 @@ pipeline {
                     sh "pwd"
                     sh "ls -l"
                     sh "id"
-                    sh "echo $HOME"
-                    sh "echo $WORKSPACE"
 
                     // clone manifest repo
                     git credentialsId: 'jenkins-git-ssh-key', url: 'git@github.com:paolocarta/gitops-repo-cicd-course.git'
@@ -177,7 +175,7 @@ pipeline {
                     sh "cd gitops-repo-cicd-course/apps/dev/code-with-quarkus"
                     
                     // connect to gke cluster
-                    sh "gcloud auth activate-service-account jenkins-gcr-push@paolos-playground-323415.iam.gserviceaccount.com --key-file=/secret/jenkins-gcr-push-sa-private-key.json --project=GCP_PROJECT"
+                    sh "gcloud auth activate-service-account jenkins-gcr-push@paolos-playground-323415.iam.gserviceaccount.com --key-file=/secret/jenkins-gcr-push-sa-private-key.json --project=$GCP_PROJECT"
                     sh "gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE"
 
                     // withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'dev-cluster', namespace: 'my-ns', serverUrl: 'https://192.168.10.10:6443']]) {
