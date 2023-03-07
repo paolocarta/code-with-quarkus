@@ -30,10 +30,10 @@ pipeline {
         timeout(time: 1, unit: 'HOURS')
     }
     
-    // triggers {
-    //     // cron('H */4 * * 1-5')
-    //     // pollSCM "*/5 * * * *"        
-    // }
+    triggers {
+        // cron('H */4 * * 1-5')
+        pollSCM "*/5 * * * *"      
+    }
 
     environment {
 
@@ -158,8 +158,9 @@ pipeline {
             }
 
             environment {
-                GKE_CLUSTER = ""
-                GKE_ZONE    = ""
+                GKE_CLUSTER     = "dev-cluster"
+                GKE_ZONE        = "asia-east1-a"
+                GCP_PROJECT     = "paolos-playground-323415"
             }
 
             steps {
@@ -171,19 +172,21 @@ pipeline {
                     sh "echo $WORKSPACE"
 
                     // clone manifest repo
-                    sh ""
-                    // git credentialsId: 'another-test-usernamepass', url: 'https://github.com/foo/bar'
+                    git credentialsId: 'jenkins-git-ssh-key', url: 'git@github.com:paolocarta/gitops-repo-cicd-course.git'
+                    sh "ls -l"
+                    sh "cd gitops-repo-cicd-course/apps/dev/code-with-quarkus"
                     
                     // connect to gke cluster
+                    sh "gcloud auth activate-service-account jenkins-gcr-push@paolos-playground-323415.iam.gserviceaccount.com --key-file=/secret/jenkins-gcr-push-sa-private-key.json --project=GCP_PROJECT"
                     sh "gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE"
 
-                    withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'dev-cluster', namespace: 'my-ns', serverUrl: 'https://192.168.10.10:6443']]) {
-                        // sh """       
-                        //     kustomize edit set image 
-                        //     kustomize build . | kubectl apply -f -
-                        //     kubectl rollout status deployment $IMAGE
-                        // """
-                    }
+                    // withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'dev-cluster', namespace: 'my-ns', serverUrl: 'https://192.168.10.10:6443']]) {
+                    //     // sh """       
+                    //     //     kustomize edit set image 
+                    //     //     kustomize build . | kubectl apply -f -
+                    //     //     kubectl rollout status deployment $IMAGE
+                    //     // """
+                    // }
 
                 }            
             }
