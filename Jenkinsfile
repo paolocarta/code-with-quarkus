@@ -172,6 +172,8 @@ pipeline {
 
                     // clone manifest repo
                     sh ""
+                    // git credentialsId: 'another-test-usernamepass', url: 'https://github.com/foo/bar'
+                    
                     // connect to gke cluster
                     sh "gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE"
 
