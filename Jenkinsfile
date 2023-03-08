@@ -171,20 +171,21 @@ pipeline {
 
                     // clone manifest repo
                     git credentialsId: 'jenkins-git-ssh-key', url: 'git@github.com:paolocarta/gitops-repo-cicd-course.git'
+                    sh "pwd"
                     sh "ls -l"
-                    sh "ls -l gitops-repo-cicd-course"
-                    sh "cd gitops-repo-cicd-course/apps/dev/code-with-quarkus"
+                    sh "cd apps/dev/code-with-quarkus"
                     
                     // connect to gke cluster
                     sh "gcloud auth activate-service-account jenkins-gcr-push@paolos-playground-323415.iam.gserviceaccount.com --key-file=/secret/jenkins-gcr-push-sa-private-key.json --project=$GCP_PROJECT"
                     sh "gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE"
 
+                    // sh """       
+                    //     // kustomize edit set image 
+                    //     kustomize build . | kubectl apply -f -
+                    //     kubectl rollout status deployment $IMAGE
+                    // """
+
                     // withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'dev-cluster', namespace: 'my-ns', serverUrl: 'https://192.168.10.10:6443']]) {
-                    //     // sh """       
-                    //     //     kustomize edit set image 
-                    //     //     kustomize build . | kubectl apply -f -
-                    //     //     kubectl rollout status deployment $IMAGE
-                    //     // """
                     // }
 
                 }            
