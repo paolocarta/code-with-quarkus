@@ -170,7 +170,7 @@ pipeline {
                     sh "id"
 
                     // clone manifest repo
-                    sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
+                    sh "ssh-keyscan github.com > ~/.ssh/known_hosts"
                     git credentialsId: 'jenkins-git-ssh-key', url: 'git@github.com:paolocarta/gitops-repo-cicd-course.git'
                     sh "ls -l"
                     sh "ls -l gitops-repo-cicd-course"
