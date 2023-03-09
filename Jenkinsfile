@@ -161,6 +161,7 @@ pipeline {
                 GKE_CLUSTER     = "dev-cluster"
                 GKE_ZONE        = "asia-east1-a"
                 GCP_PROJECT     = "paolos-playground-323415"
+                KUBECONFIG      = "/home/jenkins/agent/.kube"
             }
 
             steps {
