@@ -200,6 +200,58 @@ pipeline {
                 }
         }
 
+
+
+        // stage('Update GitOps Repo - Deploy to testing env') {
+            
+        //     when {
+        //         beforeAgent true
+        //         branch 'master'
+        //     }
+
+        //     options {
+        //         skipDefaultCheckout true
+        //     }
+            
+        //     steps {
+
+        //         container('jnlp') { 
+        //             sh "pwd"
+                    
+        //             withCredentials([usernamePassword(credentialsId: 'id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        
+        //                 sh "rm -rf your-repo"
+        //                 sh "git clone repo" 
+        //             }
+
+        //             sh "ls -l"
+        //         }
+
+        //         container('jnlp') { 
+        //             dir('folder/service') {
+
+        //                 // sh "kustomize edit set image ${SERVICE_NAME}:${BUILD_NUMBER}"
+
+        //                 sh "cat deploy.yaml"
+        //                 sh "sed -i 's+cicd/code-with-quarkus.*+cicd/code-with-quarkus:${BUILD_NUMBER}+g' deploy.yaml"
+        //                 sh "cat deploy.yaml"                      
+        //             }
+        //         }
+
+        //         container('jnlp') {
+        //             withCredentials([usernamePassword(credentialsId: 'id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+
+        //                 sh "git config user.email \"jenkins-bot@gmail.com\""
+        //                 sh "git config user.name \"Jenkins Bot\""
+
+        //                 sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
+        //                 sh "git push repo.git"             
+
+        //             }
+        //         }
+        //     }
+        // }
+
     }
 
     post {
