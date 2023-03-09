@@ -181,8 +181,7 @@ pipeline {
                     sh "gcloud auth activate-service-account jenkins-gcr-push@paolos-playground-323415.iam.gserviceaccount.com --key-file=/secret/jenkins-gcr-push-sa-private-key.json --project=$GCP_PROJECT"
                     sh "gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE"
                     
-                    sh "ls -la $HOME"                         
-                    sh "ls -la /root"                        
+                    sh "ls -la $HOME/agent"                         
                 }
                 container('kikd') {
                     sh "pwd"
@@ -193,8 +192,6 @@ pipeline {
                         def serviceName = jobName.split("/")[0]
                         env.SERVICE_NAME = serviceName
                     }
-
-                    sh "ls -la /root"     
                     
                     sh """
                         cd apps/dev/code-with-quarkus  

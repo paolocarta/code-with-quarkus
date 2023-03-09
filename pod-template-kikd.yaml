@@ -6,7 +6,7 @@ metadata:
 spec:
   containers:
   - name: kikd
-    image: clamer/kikd-yq-kctl-kustomize:1.0.0
+    image: clamer/kikd-yq-kctl-kustomize:1.1.1
     imagePullPolicy: IfNotPresent
     command:
     - cat
