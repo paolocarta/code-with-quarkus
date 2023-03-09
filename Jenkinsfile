@@ -195,8 +195,8 @@ pipeline {
                     
                     sh """
                         cd apps/dev/code-with-quarkus
-                        kubectl config current-context
-                        kustomize build . | kubectl apply --kubeconfig $KUBECONFIG -f -
+                        kubectl config view
+                        kustomize build . | kubectl apply -f -
                         kubectl rollout status deployment $SERVICE_NAME
                     """   
                 }
