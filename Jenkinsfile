@@ -173,7 +173,6 @@ pipeline {
                     // clone manifest repo
                     git credentialsId: 'jenkins-git-ssh-key', url: 'git@github.com:paolocarta/gitops-repo-cicd-course.git'
                     sh "ls -l"
-                    sh "cd apps/dev/code-with-quarkus"
                 }
                 container('gcloud') {
  
@@ -182,20 +181,22 @@ pipeline {
                     sh "gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE"
                     
                     sh "ls -la $HOME"                         
-                    sh "ls -la /root"                         
+                    sh "ls -la /root"                        
                 }
                 container('kikd') {
                     sh "pwd"
                     sh "ls -l"
-                    sh "cd apps/dev/code-with-quarkus"
 
                     script {
                         def jobName = env.JOB_NAME
                         def serviceName = jobName.split("/")[0]
                         env.SERVICE_NAME = serviceName
                     }
+
+                    sh "ls -la /root"     
                     
-                    sh """    
+                    sh """
+                        cd apps/dev/code-with-quarkus  
                         kustomize build . | kubectl apply -f -
                         kubectl rollout status deployment $SERVICE_NAME
                     """   
