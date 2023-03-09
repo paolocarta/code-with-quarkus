@@ -181,9 +181,11 @@ pipeline {
                     sh "gcloud auth activate-service-account jenkins-gcr-push@paolos-playground-323415.iam.gserviceaccount.com --key-file=/secret/jenkins-gcr-push-sa-private-key.json --project=$GCP_PROJECT"
                     sh "gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE"
                     
-                    sh "ls -l $HOME/.kube"                         
+                    sh "ls -la $HOME"                         
+                    sh "ls -la /root"                         
                 }
                 container('kikd') {
+                    sh "pwd"
                     sh "ls -l"
                     sh "cd apps/dev/code-with-quarkus"
 
@@ -202,7 +204,7 @@ pipeline {
 
         }
     }
-    
+
     post {
 
         always {
