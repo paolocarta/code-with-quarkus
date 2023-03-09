@@ -198,10 +198,11 @@ pipeline {
                         kubectl rollout status deployment $SERVICE_NAME
                     """   
                 }
+            }
+
         }
-
     }
-
+    
     post {
 
         always {
