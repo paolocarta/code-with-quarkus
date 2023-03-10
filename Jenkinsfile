@@ -175,7 +175,7 @@ pipeline {
                     git credentialsId: 'jenkins-git-ssh-key', url: 'git@github.com:paolocarta/gitops-repo-cicd-course.git'
                     sh "ls -l"
                 }
-                
+
                 container('kikd') {
                     sh "pwd"
                     sh "ls -l"
@@ -184,7 +184,7 @@ pipeline {
                     sh "gcloud auth activate-service-account jenkins-gcr-push@paolos-playground-323415.iam.gserviceaccount.com --key-file=/secret/jenkins-gcr-push-sa-private-key.json --project=$GCP_PROJECT"
                     sh "gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE"
                     
-                    sh "ls -la $HOME/agent"    
+                    sh "ls -la $HOME/agent"  
 
                     script {
                         def jobName = env.JOB_NAME
@@ -195,7 +195,7 @@ pipeline {
                     sh """
                         cd apps/dev/code-with-quarkus
                         kubectl config view
-                        kustomize build . | kubectl apply -f -
+                        kustomize build . | kubectl apply -f -n apps -
                         kubectl rollout status deployment $SERVICE_NAME
                     """   
                 }
