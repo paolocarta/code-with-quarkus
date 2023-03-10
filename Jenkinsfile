@@ -175,17 +175,16 @@ pipeline {
                     git credentialsId: 'jenkins-git-ssh-key', url: 'git@github.com:paolocarta/gitops-repo-cicd-course.git'
                     sh "ls -l"
                 }
-                container('gcloud') {
- 
+                
+                container('kikd') {
+                    sh "pwd"
+                    sh "ls -l"
+
                     // connect to gke cluster
                     sh "gcloud auth activate-service-account jenkins-gcr-push@paolos-playground-323415.iam.gserviceaccount.com --key-file=/secret/jenkins-gcr-push-sa-private-key.json --project=$GCP_PROJECT"
                     sh "gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE"
                     
-                    sh "ls -la $HOME/agent"                         
-                }
-                container('kikd') {
-                    sh "pwd"
-                    sh "ls -l"
+                    sh "ls -la $HOME/agent"    
 
                     script {
                         def jobName = env.JOB_NAME
