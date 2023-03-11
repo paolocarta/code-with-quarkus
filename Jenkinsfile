@@ -162,6 +162,7 @@ pipeline {
                 GKE_ZONE        = "asia-east1-a"
                 GCP_PROJECT     = "paolos-playground-323415"
                 KUBECONFIG      = "/home/jenkins/agent/.kube"
+                NAMESPACE       = "apps"
             }
 
             steps {
@@ -194,10 +195,13 @@ pipeline {
                     
                     sh """
                         cd apps/dev/code-with-quarkus
+                        yq write --inplace deployment.yaml 'spec.template.spec.containers[0].image' "gcr.io/paolos-playground-323415/${SERVICE_NAME}:${BUILD_NUMBER}
+"                       kustomize build .
                         kubectl config view
-                        kustomize build . | kubectl apply -n apps -f -
-                        kubectl rollout status deployment $SERVICE_NAME
+                        kustomize build . | kubectl apply -n ${NAMESPACE} -f -
                     """   
+                    // kubectl rollout status deployment $SERVICE_NAME
+
                 }
             }
 
