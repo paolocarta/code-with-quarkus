@@ -175,9 +175,7 @@ pipeline {
                     // clone manifest repo
                     git credentialsId: 'jenkins-git-ssh-key', url: 'git@github.com:paolocarta/gitops-repo-cicd-course.git'
                     sh "ls -l"
-                }
 
-                container('kikd') {
                     sh "pwd"
                     sh "ls -l"
 
@@ -199,13 +197,45 @@ pipeline {
                         kustomize build .
                         kubectl config view
                         kustomize build . | kubectl apply -n ${NAMESPACE} -f -
+                        kubectl rollout status deployment $SERVICE_NAME
                     """   
-                    // kubectl rollout status deployment $SERVICE_NAME
 
                 }
             }
 
         }
+
+        stage('Smoke Test') {
+
+            agent {
+                kubernetes {
+                    yamlFile 'pod-template-kaniko.yaml'
+                    cloud 'kubernetes'
+                }
+            } 
+
+            when {
+                beforeAgent true
+                branch 'test'
+            }
+
+            options {
+                skipDefaultCheckout true
+            }
+
+            steps {
+                container('kaniko') {
+                    sh "pwd"
+                    sh "ls -l"
+                    sh "id"
+                    sh "echo $HOME"
+                    sh "echo $WORKSPACE"
+
+                }            
+            }
+        }
+
+
     }
 
     post {
