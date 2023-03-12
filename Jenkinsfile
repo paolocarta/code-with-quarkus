@@ -197,7 +197,7 @@ pipeline {
                         kustomize build .
                         kubectl config view
                         kustomize build . | kubectl apply -n ${NAMESPACE} -f -
-                        kubectl rollout status deployment $SERVICE_NAME
+                        kubectl rollout status deployment $SERVICE_NAME -n ${NAMESPACE}
                     """   
 
                 }
