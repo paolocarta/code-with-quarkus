@@ -196,7 +196,7 @@ pipeline {
                     sh """
                         cd apps/dev/code-with-quarkus
                         yq -i '.spec.template.spec.containers[0].image = \"gcr.io/paolos-playground-323415/${SERVICE_NAME}:${BUILD_NUMBER}\"' deployment.yaml
-"                       kustomize build .
+                        kustomize build .
                         kubectl config view
                         kustomize build . | kubectl apply -n ${NAMESPACE} -f -
                     """   
