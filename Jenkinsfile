@@ -37,7 +37,9 @@ pipeline {
 
     environment {
 
-        CI_CD_NAMESPACE   = 'jenkins'
+        CI_CD_NAMESPACE = 'jenkins'
+        GCP_PROJECT     = "paolos-playground-323415"
+        CONTAINER_REG   = "gcr.io"
     }
   
     stages {
@@ -80,7 +82,7 @@ pipeline {
                         
                         sh "pwd"
                         sh "id"
-                        sh "ls -l /home/jenkins/agent/workspace"
+                        sh "ls -l ${HOME}/agent/workspace"
                         sh "echo $HOME"
                         sh "ls -l /root/.m2"
 
@@ -110,11 +112,6 @@ pipeline {
                 skipDefaultCheckout true
             }
 
-            // environment {
-            //     HTTP_PROXY        = ''
-            //     HTTPS_PROXY       = ''
-            // }
-
             steps {
                 container('kaniko') {
                     sh "pwd"
@@ -131,8 +128,8 @@ pipeline {
                                         
                     sh "/kaniko/executor \
                         --context=dir://$WORKSPACE --dockerfile=Dockerfile.jvm  \
-                        --destination=gcr.io/paolos-playground-323415/${SERVICE_NAME}:${BUILD_NUMBER} \
-                        --destination=gcr.io/paolos-playground-323415/${SERVICE_NAME}:${GIT_COMMIT} \
+                        --destination=${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER} \
+                        --destination=${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${GIT_COMMIT} \
                         --cache" 
 
                 }            
@@ -160,8 +157,7 @@ pipeline {
             environment {
                 GKE_CLUSTER     = "dev-cluster"
                 GKE_ZONE        = "asia-east1-a"
-                GCP_PROJECT     = "paolos-playground-323415"
-                KUBECONFIG      = "/home/jenkins/agent/.kube"
+                KUBECONFIG      = "${HOME}/agent/.kube"
                 NAMESPACE       = "apps"
             }
 
@@ -174,13 +170,11 @@ pipeline {
 
                     // clone manifest repo
                     git credentialsId: 'jenkins-git-ssh-key', url: 'git@github.com:paolocarta/gitops-repo-cicd-course.git'
-                    sh "ls -l"
 
-                    sh "pwd"
                     sh "ls -l"
 
                     // connect to gke cluster
-                    sh "gcloud auth activate-service-account jenkins-gcr-push@paolos-playground-323415.iam.gserviceaccount.com --key-file=/secret/jenkins-gcr-push-sa-private-key.json --project=$GCP_PROJECT"
+                    sh "gcloud auth activate-service-account jenkins-gcr-push@${GCP_PROJECT}.iam.gserviceaccount.com --key-file=/secret/jenkins-gcr-push-sa-private-key.json --project=$GCP_PROJECT"
                     sh "gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE"
                     
                     sh "ls -la $HOME/agent"  
@@ -193,7 +187,7 @@ pipeline {
                     
                     sh """
                         cd apps/dev/code-with-quarkus
-                        yq -i '.spec.template.spec.containers[0].image = \"gcr.io/paolos-playground-323415/${SERVICE_NAME}:${BUILD_NUMBER}\"' deployment.yaml
+                        yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}\"' deployment.yaml
                         kustomize build .
                         kubectl config view
                         kustomize build . | kubectl apply -n ${NAMESPACE} -f -
