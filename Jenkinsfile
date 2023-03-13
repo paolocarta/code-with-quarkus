@@ -76,6 +76,11 @@ pipeline {
                 }
             }
 
+            when {
+                beforeAgent true
+                branch 'helm-test'
+            }
+
             steps {
                 container('maven') {
                     // configFileProvider([configFile(fileId: "${params.MAVEN_SETTINGS_ID}", variable: 'MAVEN_SETTINGS')]) {
@@ -105,7 +110,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'master'
+                branch 'helm-test'
             }
 
             options {
@@ -147,7 +152,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'test'
+                branch 'helm-test'
             }
 
             options {
@@ -186,11 +191,11 @@ pipeline {
                     }
                     
                     sh """
-                        cd apps/dev/code-with-quarkus
-                        yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}\"' deployment.yaml
-                        kustomize build .
+                        cd apps-helm/code-with-quarkus
                         kubectl config view
-                        kustomize build . | kubectl apply -n ${NAMESPACE} -f -
+                        helm template .
+                        helm install ${SERVICE_NAME} .
+                        helm list
                         kubectl rollout status deployment $SERVICE_NAME -n ${NAMESPACE}
                     """   
 
@@ -210,7 +215,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'test'
+                branch 'helm-test'
             }
 
             options {
