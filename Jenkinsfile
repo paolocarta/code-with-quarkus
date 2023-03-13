@@ -216,7 +216,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'test'
+                branch 'master'
             }
 
             options {
@@ -248,7 +248,7 @@ pipeline {
             //     // sh 'rm -rf /tmp/workspace/${SERVICE_NAME}'
             // }
 
-            // cleanWs()
+            cleanWs()
         }        
         
     }
