@@ -194,7 +194,7 @@ pipeline {
                         cd apps-helm/code-with-quarkus
                         kubectl config view
                         helm template .
-                        helm install ${SERVICE_NAME} .
+                        helm install ${SERVICE_NAME}-helm .
                         helm list
                         kubectl rollout status deployment $SERVICE_NAME -n ${NAMESPACE}
                     """   
