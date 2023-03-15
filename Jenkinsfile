@@ -194,7 +194,7 @@ pipeline {
                         cd apps-helm/code-with-quarkus
                         kubectl config view
                         helm template .
-                        helm install ${SERVICE_NAME}-helm --set image.tag=${BUILD_NUMBER}-helm .
+                        helm install ${SERVICE_NAME}-helm --set image.tag=${BUILD_NUMBER}-helm -n ${NAMESPACE} .
                         helm list
                         kubectl rollout status deployment $SERVICE_NAME -n ${NAMESPACE}
                     """   
