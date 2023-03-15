@@ -78,7 +78,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'helm-test'
+                branch 'helm'
             }
 
             steps {
@@ -110,7 +110,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'helm-test'
+                branch 'helm'
             }
 
             options {
@@ -133,9 +133,9 @@ pipeline {
                                         
                     sh "/kaniko/executor \
                         --context=dir://$WORKSPACE --dockerfile=Dockerfile.jvm  \
-                        --destination=${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER} \
-                        --destination=${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${GIT_COMMIT} \
-                        --cache" 
+                        --destination=${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}-helm \
+                        --destination=${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${GIT_COMMIT}-helm \
+                        --cache"
 
                 }            
             }
@@ -152,7 +152,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'helm-test'
+                branch 'helm'
             }
 
             options {
@@ -194,7 +194,7 @@ pipeline {
                         cd apps-helm/code-with-quarkus
                         kubectl config view
                         helm template .
-                        helm install ${SERVICE_NAME}-helm .
+                        helm install ${SERVICE_NAME}-helm --set image.tag=${BUILD_NUMBER}-helm .
                         helm list
                         kubectl rollout status deployment $SERVICE_NAME -n ${NAMESPACE}
                     """   
@@ -215,7 +215,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'helm-test'
+                branch 'helm'
             }
 
             options {
