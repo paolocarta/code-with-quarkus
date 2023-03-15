@@ -196,7 +196,7 @@ pipeline {
                         helm template .
                         helm install ${SERVICE_NAME}-helm --set image.tag=${BUILD_NUMBER}-helm -n ${NAMESPACE} .
                         helm list
-                        kubectl rollout status deployment $SERVICE_NAME -n ${NAMESPACE}
+                        kubectl rollout status deployment ${SERVICE_NAME}-helm -n ${NAMESPACE}
                     """   
 
                 }
