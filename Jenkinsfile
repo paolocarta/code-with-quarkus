@@ -186,7 +186,7 @@ pipeline {
                     }
                     
                     sh """
-                        cd apps/dev/code-with-quarkus
+                        cd apps-kustomize/dev/code-with-quarkus
                         yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}\"' deployment.yaml
                         kustomize build .
                         kubectl config view
