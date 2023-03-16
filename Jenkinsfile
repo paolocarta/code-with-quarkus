@@ -187,9 +187,9 @@ pipeline {
 
                         // sh "kustomize edit set image ${SERVICE_NAME}:${BUILD_NUMBER}"
 
-                        sh "cat deploy.yaml"
-                        sh "sed -i 's+cicd/code-with-quarkus.*+cicd/code-with-quarkus:${BUILD_NUMBER}+g' deploy.yaml"
-                        sh "cat deploy.yaml"                      
+                        sh "cat deployment.yaml"
+                        sh "yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}\"' deployment.yaml"
+                        sh "cat deployment.yaml"                      
                     }
                 }
 
