@@ -176,7 +176,7 @@ pipeline {
 
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                         
-                        sh "eval \$(ssh-agent) && ssh-add ${SSH_KEY} && ssh-add -l"
+                        sh "eval \$(ssh-agent) && ssh-add $SSH_KEY && ssh-add -l"
                         sh "git clone repo"
                         sh "ls -l"
                     }
@@ -200,7 +200,7 @@ pipeline {
                         sh "git config user.name \"Jenkins Bot\""
 
                         sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
-                        sh "eval \$(ssh-agent) && ssh-add ${SSH_KEY} && ssh-add -l"
+                        sh "eval \$(ssh-agent) && ssh-add $SSH_KEY && ssh-add -l"
                         sh "git push origin master"
 
                         // sh "GIT_SSH_COMMAND="ssh -i $SSH_KEY" git push origin master"             
