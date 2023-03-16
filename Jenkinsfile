@@ -147,7 +147,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'test'
+                branch 'master'
             }
 
             options {
@@ -210,7 +210,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'test'
+                branch 'master'
             }
 
             options {
