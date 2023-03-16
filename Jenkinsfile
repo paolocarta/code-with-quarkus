@@ -105,7 +105,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'master'
+                branch 'gitops-test'
             }
 
             options {
@@ -147,7 +147,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'test'
+                branch 'gitops-test'
             }
 
             options {
@@ -162,38 +162,47 @@ pipeline {
             }
 
             steps {
-                container('kikd') {
+                // container('kikd') {
+                //     // clone manifest repo
+                //     git credentialsId: 'jenkins-git-ssh-key', url: 'git@github.com:paolocarta/gitops-repo-cicd-course.git'
+                // }
+
+                container('kikd') { 
                     sh "pwd"
                     sh "ls -l"
                     sh "id"
                     sh "echo $HOME"
-
-                    // clone manifest repo
-                    git credentialsId: 'jenkins-git-ssh-key', url: 'git@github.com:paolocarta/gitops-repo-cicd-course.git'
+                    
+                    withCredentials([usernamePassword(credentialsId: 'id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        
+                        sh "rm -rf your-repo"
+                        sh "git clone repo" 
+                    }
 
                     sh "ls -l"
+                }
 
-                    // connect to gke cluster
-                    sh "gcloud auth activate-service-account jenkins-gcr-push@${GCP_PROJECT}.iam.gserviceaccount.com --key-file=/secret/jenkins-gcr-push-sa-private-key.json --project=$GCP_PROJECT"
-                    sh "gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE"
-                    
-                    sh "ls -la $HOME/agent"  
+                container('kikd') { 
+                    dir('folder/service') {
 
-                    script {
-                        def jobName = env.JOB_NAME
-                        def serviceName = jobName.split("/")[0]
-                        env.SERVICE_NAME = serviceName
+                        // sh "kustomize edit set image ${SERVICE_NAME}:${BUILD_NUMBER}"
+
+                        sh "cat deploy.yaml"
+                        sh "sed -i 's+cicd/code-with-quarkus.*+cicd/code-with-quarkus:${BUILD_NUMBER}+g' deploy.yaml"
+                        sh "cat deploy.yaml"                      
                     }
-                    
-                    sh """
-                        cd apps/dev/code-with-quarkus
-                        yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}\"' deployment.yaml
-                        kustomize build .
-                        kubectl config view
-                        kustomize build . | kubectl apply -n ${NAMESPACE} -f -
-                        kubectl rollout status deployment $SERVICE_NAME -n ${NAMESPACE}
-                    """   
+                }
 
+                container('kikd') {
+                    withCredentials([usernamePassword(credentialsId: 'id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+
+                        sh "git config user.email \"jenkins-bot@gmail.com\""
+                        sh "git config user.name \"Jenkins Bot\""
+
+                        sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
+                        sh "git push repo.git"             
+
+                    }
                 }
             }
 
@@ -210,7 +219,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'test'
+                branch 'gitops-test'
             }
 
             options {
