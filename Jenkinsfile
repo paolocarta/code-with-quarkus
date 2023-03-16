@@ -128,7 +128,7 @@ pipeline {
                                         
                     sh "/kaniko/executor \
                         --context=dir://$WORKSPACE --dockerfile=Dockerfile.jvm  \
-                        --destination=${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER} \
+                        --destination=${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}-gitops \
                         --destination=${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${GIT_COMMIT} \
                         --cache" 
 
@@ -188,7 +188,7 @@ pipeline {
                         // sh "kustomize edit set image ${SERVICE_NAME}:${BUILD_NUMBER}"
 
                         sh "cat deployment.yaml"
-                        sh "yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}\"' deployment.yaml"
+                        sh "yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}-gitops\"' deployment.yaml"
                         sh "cat deployment.yaml"                      
                     }
                 }
