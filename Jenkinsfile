@@ -162,6 +162,7 @@ pipeline {
             }
 
             steps {
+                
                 // container('kikd') {
                 //     // clone manifest repo
                 //     git credentialsId: 'jenkins-git-ssh-key', url: 'git@github.com:paolocarta/gitops-repo-cicd-course.git'
@@ -172,18 +173,17 @@ pipeline {
                     sh "ls -l"
                     sh "id"
                     sh "echo $HOME"
-                    
-                    withCredentials([usernamePassword(credentialsId: 'id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        
-                        sh "rm -rf your-repo"
-                        sh "git clone repo" 
-                    }
 
-                    sh "ls -l"
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
+                        
+                        sh "eval \$(ssh-agent) && ssh-add ${SSH_KEY} && ssh-add -l"
+                        sh "git clone repo"
+                        sh "ls -l"
+                    }
                 }
 
                 container('kikd') { 
-                    dir('folder/service') {
+                    dir('apps-kustomize/dev/code-with-quarkus') {
 
                         // sh "kustomize edit set image ${SERVICE_NAME}:${BUILD_NUMBER}"
 
@@ -194,14 +194,16 @@ pipeline {
                 }
 
                 container('kikd') {
-                    withCredentials([usernamePassword(credentialsId: 'id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
 
                         sh "git config user.email \"jenkins-bot@gmail.com\""
                         sh "git config user.name \"Jenkins Bot\""
 
                         sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
-                        sh "git push repo.git"             
+                        sh "eval \$(ssh-agent) && ssh-add ${SSH_KEY} && ssh-add -l"
+                        sh "git push origin master"
 
+                        // sh "GIT_SSH_COMMAND="ssh -i $SSH_KEY" git push origin master"             
                     }
                 }
             }
