@@ -105,7 +105,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'gitops-test'
+                branch 'gitops'
             }
 
             options {
@@ -147,7 +147,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'gitops-test'
+                branch 'gitops'
             }
 
             options {
@@ -168,7 +168,7 @@ pipeline {
                 //     git credentialsId: 'jenkins-git-ssh-key', url: 'git@github.com:paolocarta/gitops-repo-cicd-course.git'
                 // }
 
-                container('kikd') { 
+                container('kikd') {
                     sh "pwd"
                     sh "ls -l"
                     sh "id"
