@@ -169,7 +169,7 @@ pipeline {
                 // }
 
                 container('kikd') {
-                    
+
                     sh "pwd"
                     sh "ls -l"
                     sh "id"
@@ -178,7 +178,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                         
                         sh "eval \$(ssh-agent) && ssh-add $SSH_KEY && ssh-add -l"
-                        sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
+                        sh "ssh-keyscan github.com > ~/.ssh/known_hosts"
                         sh "git clone git@github.com:paolocarta/gitops-repo-cicd-course.git"
                         sh "ls -l"
                     }
