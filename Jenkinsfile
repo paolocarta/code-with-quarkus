@@ -169,6 +169,7 @@ pipeline {
                 // }
 
                 container('kikd') {
+                    
                     sh "pwd"
                     sh "ls -l"
                     sh "id"
@@ -177,12 +178,10 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                         
                         sh "eval \$(ssh-agent) && ssh-add $SSH_KEY && ssh-add -l"
+                        sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
                         sh "git clone git@github.com:paolocarta/gitops-repo-cicd-course.git"
                         sh "ls -l"
                     }
-                }
-
-                container('kikd') { 
                     dir('apps-kustomize/dev/code-with-quarkus') {
 
                         // sh "kustomize edit set image ${SERVICE_NAME}:${BUILD_NUMBER}"
@@ -191,16 +190,13 @@ pipeline {
                         sh "yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}-gitops\"' deployment.yaml"
                         sh "cat deployment.yaml"                      
                     }
-                }
-
-                container('kikd') {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
 
                         sh "git config user.email \"jenkins-bot@gmail.com\""
                         sh "git config user.name \"Jenkins Bot\""
 
                         sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
-                        sh "eval \$(ssh-agent) && ssh-add $SSH_KEY && ssh-add -l"
+                        // sh "eval \$(ssh-agent) && ssh-add $SSH_KEY && ssh-add -l"
                         sh "git push origin master"
 
                         // sh "GIT_SSH_COMMAND="ssh -i $SSH_KEY" git push origin master"             
