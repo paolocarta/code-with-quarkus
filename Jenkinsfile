@@ -177,7 +177,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                         
                         sh "eval \$(ssh-agent) && ssh-add $SSH_KEY && ssh-add -l"
-                        sh "git clone repo"
+                        sh "git clone git@github.com:paolocarta/gitops-repo-cicd-course.git"
                         sh "ls -l"
                     }
                 }
