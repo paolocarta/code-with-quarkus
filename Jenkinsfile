@@ -189,8 +189,6 @@ pipeline {
 
                     dir('gitops-repo-cicd-course/apps-kustomize/dev/code-with-quarkus') {
 
-                        // sh "kustomize edit set image ${SERVICE_NAME}:${BUILD_NUMBER}"
-
                         sh "cat deployment.yaml"
                         sh "yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}-gitops\"' deployment.yaml"
                         sh "cat deployment.yaml"                      
@@ -257,7 +255,7 @@ pipeline {
             //     // sh 'rm -rf /tmp/workspace/${SERVICE_NAME}'
             // }
 
-            cleanWs()
+            // cleanWs()
         }        
         
     }
