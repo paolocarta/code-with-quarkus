@@ -185,7 +185,7 @@ pipeline {
                             git clone $GITOPS_REPO"
 
                         sh "ls -l gitops-repo-cicd-course"
-                        sh "chown -r 1001:1001 gitops-repo-cicd-course"
+                        sh "chown -R 1001:1001 gitops-repo-cicd-course"
                     }
 
                     dir('gitops-repo-cicd-course/apps-kustomize/dev/code-with-quarkus') {

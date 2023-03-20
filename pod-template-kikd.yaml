@@ -16,15 +16,15 @@ spec:
         mountPath: /secret
       - name: git-access
         mountPath: /home/jenkins/ssh-keys
-  - name: gcloud
-    image: google/cloud-sdk:421.0.0-slim
-    imagePullPolicy: IfNotPresent
-    command:
-    - cat
-    tty: true
-    volumeMounts:
-      - name: registry-auth-config
-        mountPath: /secret
+  # - name: gcloud
+  #   image: google/cloud-sdk:421.0.0-slim
+  #   imagePullPolicy: IfNotPresent
+  #   command:
+  #   - cat
+  #   tty: true
+  #   volumeMounts:
+  #     - name: registry-auth-config
+  #       mountPath: /secret
   volumes:
     - name: registry-auth-config
       secret:
