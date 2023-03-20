@@ -184,6 +184,7 @@ pipeline {
                         sh "eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L && \
                             git clone $GITOPS_REPO"
 
+                        sh "ls -l"
                         sh "ls -l gitops-repo-cicd-course"
                     }
 
@@ -192,19 +193,14 @@ pipeline {
                         def serviceName = jobName.split("/")[0]
                         env.SERVICE_NAME = serviceName
                     }
-                    dir('gitops-repo-cicd-course/apps-kustomize') {
-
-                        sh "ls -l apps-kustomize/dev"
-                        sh "ls -l apps-kustomize/dev/code-with-quarkus"
-
-                    }
-                    dir('gitops-repo-cicd-course') {
+                    // dir('gitops-repo-cicd-course') {
                         sh """
-                            cat apps-kustomize/dev/code-with-quarkus/deployment.yaml
-                            yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}-gitops\"' apps-kustomize/dev/code-with-quarkus/deployment.yaml
-                            cat apps-kustomize/dev/code-with-quarkus/deployment.yaml   
+                            cd gitops-repo-cicd-course/apps-kustomize/dev/code-with-quarkus
+                            cat deployment.yaml
+                            yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}-gitops\"' deployment.yaml
+                            cat deployment.yaml   
                         """
-                    }
+                    // }
 
                     // withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                         
