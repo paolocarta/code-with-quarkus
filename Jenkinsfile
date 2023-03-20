@@ -193,28 +193,21 @@ pipeline {
                         def serviceName = jobName.split("/")[0]
                         env.SERVICE_NAME = serviceName
                     }
-                    // dir('gitops-repo-cicd-course') {
-                        sh """
-                            cd gitops-repo-cicd-course/apps-kustomize/dev/code-with-quarkus
-                            cat deployment.yaml
-                            yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}-gitops\"' deployment.yaml
-                            cat deployment.yaml   
-                        """
-                    // }
-
-                    // withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
+                    sh """
+                        cd gitops-repo-cicd-course/apps-kustomize/dev/code-with-quarkus
+                        cat deployment.yaml
+                        yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}-gitops\"' deployment.yaml
+                        cat deployment.yaml   
+                    """
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                         
-                    //     sh "git config user.email \"jenkins-bot@gmail.com\""
-                    //     sh "git config user.name \"Jenkins Bot\""
+                        sh "git config user.email \"jenkins-bot@gmail.com\""
+                        sh "git config user.name \"Jenkins Bot\""
 
-                    //     sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
-                    //     sh "eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L && \
-                    //         git push origin $BRANCH_NAME"
-                    // }
-
-
-
-                    // sh "GIT_SSH_COMMAND="ssh -i $SSH_KEY" git push origin master"                   
+                        sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
+                        sh "eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L && \
+                            git push origin $BRANCH_NAME"
+                    }
                 }
             }
 
