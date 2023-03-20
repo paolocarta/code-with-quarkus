@@ -76,6 +76,11 @@ pipeline {
                 }
             }
 
+            when {
+                beforeAgent true
+                branch 'gitops-test'
+            }
+
             steps {
                 container('maven') {
                     // configFileProvider([configFile(fileId: "${params.MAVEN_SETTINGS_ID}", variable: 'MAVEN_SETTINGS')]) {
@@ -105,7 +110,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'gitops'
+                branch 'gitops-test'
             }
 
             options {
@@ -159,14 +164,10 @@ pipeline {
                 GKE_ZONE        = "asia-east1-a"
                 KUBECONFIG      = "${HOME}/agent/.kube"
                 NAMESPACE       = "apps"
+                GITOPS_REPO     = "git@github.com:paolocarta/gitops-repo-cicd-course.git"
             }
 
             steps {
-                
-                // container('kikd') {
-                //     // clone manifest repo
-                //     git credentialsId: 'jenkins-git-ssh-key', url: 'git@github.com:paolocarta/gitops-repo-cicd-course.git'
-                // }
 
                 container('kikd') {
 
@@ -177,12 +178,14 @@ pipeline {
 
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                         
+                        sh "echo $SSH_KEY"
                         sh "eval \$(ssh-agent) && ssh-add $SSH_KEY && ssh-add -l"
                         sh "mkdir ~/.ssh && touch ~/.ssh/known_hosts"
                         sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
-                        sh "git clone git@github.com:paolocarta/gitops-repo-cicd-course.git"
+                        sh "git clone $GITOPS_REPO"
                         sh "ls -l"
                     }
+
                     dir('apps-kustomize/dev/code-with-quarkus') {
 
                         // sh "kustomize edit set image ${SERVICE_NAME}:${BUILD_NUMBER}"
@@ -191,17 +194,14 @@ pipeline {
                         sh "yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}-gitops\"' deployment.yaml"
                         sh "cat deployment.yaml"                      
                     }
-                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
 
-                        sh "git config user.email \"jenkins-bot@gmail.com\""
-                        sh "git config user.name \"Jenkins Bot\""
+                    sh "git config user.email \"jenkins-bot@gmail.com\""
+                    sh "git config user.name \"Jenkins Bot\""
 
-                        sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
-                        // sh "eval \$(ssh-agent) && ssh-add $SSH_KEY && ssh-add -l"
-                        sh "git push origin master"
+                    sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
+                    sh "git push origin master"
 
-                        // sh "GIT_SSH_COMMAND="ssh -i $SSH_KEY" git push origin master"             
-                    }
+                    // sh "GIT_SSH_COMMAND="ssh -i $SSH_KEY" git push origin master"                   
                 }
             }
 
