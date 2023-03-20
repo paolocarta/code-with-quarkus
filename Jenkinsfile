@@ -192,12 +192,12 @@ pipeline {
                         def serviceName = jobName.split("/")[0]
                         env.SERVICE_NAME = serviceName
                     }
-                    // dir('gitops-repo-cicd-course/apps-kustomize') {
+                    dir('gitops-repo-cicd-course/apps-kustomize') {
 
-                    //     sh "ls -l apps-kustomize/dev"
-                    //     sh "ls -l apps-kustomize/dev/code-with-quarkus"
+                        sh "ls -l apps-kustomize/dev"
+                        sh "ls -l apps-kustomize/dev/code-with-quarkus"
 
-                    // }
+                    }
                     dir('gitops-repo-cicd-course') {
                         sh """
                             cat apps-kustomize/dev/code-with-quarkus/deployment.yaml
