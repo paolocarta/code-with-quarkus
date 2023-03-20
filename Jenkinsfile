@@ -192,16 +192,20 @@ pipeline {
                         def serviceName = jobName.split("/")[0]
                         env.SERVICE_NAME = serviceName
                     }
+                    dir('gitops-repo-cicd-course') {
 
+                        sh "pwd"
+                        sh "ls -l"
+
+                    }
                     dir('gitops-repo-cicd-course/apps-kustomize/dev/code-with-quarkus') {
                         sh """
-                            chown -R 1001:1001 gitops-repo-cicd-course
-                            ls -l gitops-repo-cicd-course
+                            id
+                            pwd
                             cat deployment.yaml
                             yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}-gitops\"' deployment.yaml
                             cat deployment.yaml   
                         """
-               
                     }
 
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
