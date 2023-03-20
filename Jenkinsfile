@@ -180,12 +180,14 @@ pipeline {
                         
                         sh "mkdir ~/.ssh && touch ~/.ssh/known_hosts"
                         sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
-                        sh "eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L && git clone $GITOPS_REPO"
-                        sh "ls -l"
-                        // sh "ls -l gitops-repo-cicd-course"
+
+                        sh "eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L && \
+                            git clone $GITOPS_REPO"
+
+                        sh "ls -l gitops-repo-cicd-course"
                     }
 
-                    dir('apps-kustomize/dev/code-with-quarkus') {
+                    dir('gitops-repo-cicd-course/apps-kustomize/dev/code-with-quarkus') {
 
                         // sh "kustomize edit set image ${SERVICE_NAME}:${BUILD_NUMBER}"
 
