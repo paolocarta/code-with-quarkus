@@ -196,11 +196,17 @@ pipeline {
                         sh "cat deployment.yaml"                      
                     }
 
-                    sh "git config user.email \"jenkins-bot@gmail.com\""
-                    sh "git config user.name \"Jenkins Bot\""
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
+                        
+                        sh "git config user.email \"jenkins-bot@gmail.com\""
+                        sh "git config user.name \"Jenkins Bot\""
 
-                    sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
-                    sh "git push origin master"
+                        sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
+                        sh "eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L && \
+                            git push origin $BRANCH_NAME"
+                    }
+
+
 
                     // sh "GIT_SSH_COMMAND="ssh -i $SSH_KEY" git push origin master"                   
                 }
