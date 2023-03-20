@@ -187,6 +187,12 @@ pipeline {
                         sh "ls -l gitops-repo-cicd-course"
                     }
 
+                    script {
+                        def jobName = env.JOB_NAME
+                        def serviceName = jobName.split("/")[0]
+                        env.SERVICE_NAME = serviceName
+                    }
+
                     dir('gitops-repo-cicd-course/apps-kustomize/dev/code-with-quarkus') {
                         sh """
                             chown -R 1001:1001 gitops-repo-cicd-course
