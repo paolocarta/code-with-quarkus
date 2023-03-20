@@ -181,8 +181,10 @@ pipeline {
                         sh "eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L"
                         sh "mkdir ~/.ssh && touch ~/.ssh/known_hosts"
                         sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
+                        sh "ssh-add -L"
                         sh "git clone $GITOPS_REPO"
                         sh "ls -l"
+                        // sh "ls -l gitops-repo-cicd-course"
                     }
 
                     dir('apps-kustomize/dev/code-with-quarkus') {
