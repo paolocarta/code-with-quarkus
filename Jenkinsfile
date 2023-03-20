@@ -202,8 +202,8 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                         
                         sh "mkdir $HOME/.git && touch $HOME/.git/config"
-                        sh "git config user.email \"jenkins-bot@gmail.com\""
-                        sh "git config user.name \"Jenkins Bot\""
+                        sh "git config --local user.email \"jenkins-bot@gmail.com\""
+                        sh "git config --local user.name \"Jenkins Bot\""
 
                         sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
                         sh "eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L && \
