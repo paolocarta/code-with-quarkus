@@ -201,7 +201,7 @@ pipeline {
                     """
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                         
-                        sh "mkdir ~/.git && touch ~/.git/config"
+                        sh "mkdir $HOME/.git && touch $HOME/.git/config"
                         sh "git config user.email \"jenkins-bot@gmail.com\""
                         sh "git config user.name \"Jenkins Bot\""
 
