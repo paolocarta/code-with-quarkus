@@ -147,6 +147,7 @@ pipeline {
                 kubernetes {
                     yamlFile 'pod-template-kikd.yaml'
                     cloud 'kubernetes'
+                    workspaceVolume persistentVolumeClaimWorkspaceVolume(claimName: 'workspace', readOnly: false)
                 }
             } 
 
