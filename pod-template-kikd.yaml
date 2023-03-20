@@ -15,7 +15,7 @@ spec:
       - name: registry-auth-config
         mountPath: /secret
       - name: git-access
-        mountPath: /root/.ssh
+        mountPath: /home/jenkins/ssh-keys
   - name: gcloud
     image: google/cloud-sdk:421.0.0-slim
     imagePullPolicy: IfNotPresent
