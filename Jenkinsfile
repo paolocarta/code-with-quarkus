@@ -195,16 +195,18 @@ pipeline {
                     dir('gitops-repo-cicd-course') {
 
                         sh "pwd"
-                        sh "ls -l"
+                        sh "ls -l apps-kustomize"
+                        sh "ls -l apps-kustomize/dev"
+                        sh "ls -l apps-kustomize/dev/code-with-quarkus"
 
                     }
-                    dir('gitops-repo-cicd-course/apps-kustomize/dev/code-with-quarkus') {
+                    dir('gitops-repo-cicd-course') {
                         sh """
                             id
                             pwd
-                            cat deployment.yaml
-                            yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}-gitops\"' deployment.yaml
-                            cat deployment.yaml   
+                            cat apps-kustomize/dev/code-with-quarkus/eployment.yaml
+                            yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}-gitops\"' apps-kustomize/dev/code-with-quarkus/deployment.yaml
+                            cat apps-kustomize/dev/code-with-quarkus/deployment.yaml   
                         """
                     }
 
