@@ -185,15 +185,14 @@ pipeline {
                             git clone $GITOPS_REPO"
 
                         sh "ls -l gitops-repo-cicd-course"
+                        sh "chown -r 1001:1001 gitops-repo-cicd-course"
                     }
 
-                    // dir('gitops-repo-cicd-course/apps-kustomize/dev/code-with-quarkus') {
-                        sh "cd gitops-repo-cicd-course/apps-kustomize/dev/code-with-quarkus"
-                        sh "ls -l"
+                    dir('gitops-repo-cicd-course/apps-kustomize/dev/code-with-quarkus') {
                         sh "cat deployment.yaml"
                         sh "yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}-gitops\"' deployment.yaml"
                         sh "cat deployment.yaml"                      
-                    // }
+                    }
 
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                         
