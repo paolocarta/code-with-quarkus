@@ -14,6 +14,8 @@ spec:
     volumeMounts:
       - name: registry-auth-config
         mountPath: /secret
+      - name: git-access
+        mountPath: /root/.ssh
   - name: gcloud
     image: google/cloud-sdk:421.0.0-slim
     imagePullPolicy: IfNotPresent
@@ -27,3 +29,6 @@ spec:
     - name: registry-auth-config
       secret:
         secretName: registry-auth-config
+    - name: git-access
+      secret:
+        secretName: jenkins-git-ssh-key
