@@ -181,6 +181,7 @@ pipeline {
                         
                         sh "mkdir ~/.ssh && touch ~/.ssh/known_hosts"
                         sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
+                        sh "rm -rf gitops-repo-cicd-course"
 
                         sh "eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L && \
                             git clone $GITOPS_REPO"
