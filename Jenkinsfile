@@ -178,7 +178,8 @@ pipeline {
 
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                         
-                        sh "echo $SSH_KEY"
+                        sh "echo $SSH_KEY > data"
+                        sh "cat data"
                         sh "eval \$(ssh-agent) && ssh-add $SSH_KEY && ssh-add -l"
                         sh "mkdir ~/.ssh && touch ~/.ssh/known_hosts"
                         sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
