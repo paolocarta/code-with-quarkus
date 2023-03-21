@@ -181,6 +181,7 @@ pipeline {
                         
                         sh "mkdir ~/.ssh && touch ~/.ssh/known_hosts"
                         sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
+                        sh "cat /root/.ssh/known_hosts"
                         // sh "rm -rf gitops-repo-cicd-course"
 
                         sh "eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L && \
@@ -203,15 +204,14 @@ pipeline {
                     """
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                         
-                        // sh "mkdir $HOME/.git && touch $HOME/.git/config"
                         sh "pwd"
-
+                        
+                        sh "mkdir $HOME/.git && touch $HOME/.git/config"
+                        sh "mkdir /root/.git && touch /root/.git/config"
                         sh "ls -la $HOME"
                         sh "ls -la /root"
-                        
-                        sh "cd gitops-repo-cicd-course && ls -la .git"
-                        sh "cd gitops-repo-cicd-course && cat .git/config"
-                        sh "cd gitops-repo-cicd-course && echo 'hello' >> .git/config"
+
+                        // sh "cd gitops-repo-cicd-course && echo 'hello' >> .git/config"
 
                         sh "git config user.email \"jenkins-bot@gmail.com\""
                         sh "git config local user.name \"Jenkins Bot\""
