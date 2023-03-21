@@ -215,7 +215,7 @@ pipeline {
                             cd gitops-repo-cicd-course
                             git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\"
                             eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L
-                            git push origin $BRANCH_NAME
+                            git push
                         """
                     }
                 }
