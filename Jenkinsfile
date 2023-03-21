@@ -205,10 +205,10 @@ pipeline {
                         
                         // sh "mkdir $HOME/.git && touch $HOME/.git/config"
                         sh "pwd"
-                        
+
                         sh "ls -la $HOME"
-                        sh "ls -la /root
-                        "
+                        sh "ls -la /root"
+                        
                         sh "cd gitops-repo-cicd-course && ls -la .git"
                         sh "cd gitops-repo-cicd-course && cat .git/config"
                         sh "cd gitops-repo-cicd-course && echo 'hello' >> .git/config"
