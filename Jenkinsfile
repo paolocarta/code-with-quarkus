@@ -205,19 +205,18 @@ pipeline {
                         
                         sh "pwd"
                         
-                        sh "mkdir $HOME/.git && touch $HOME/.git/config"
+                        // sh "mkdir $HOME/.git && touch $HOME/.git/config"
                         sh "mkdir /root/.git && touch /root/.git/config"
-                        sh "ls -la $HOME"
-                        sh "ls -la /root"
-
-                        // sh "cd gitops-repo-cicd-course && echo 'hello' >> .git/config"
 
                         sh "git config --global user.email \"jenkins-bot@gmail.com\""
                         sh "git config --global user.name \"Jenkins Bot\""
 
-                        sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
-                        sh "eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L && \
-                            git push origin $BRANCH_NAME"
+                        sh """
+                            cd gitops-repo-cicd-course
+                            git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\"
+                            eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L
+                            git push origin $BRANCH_NAME
+                        """
                     }
                 }
             }
