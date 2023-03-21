@@ -181,7 +181,6 @@ pipeline {
                         
                         sh "mkdir ~/.ssh && touch ~/.ssh/known_hosts"
                         sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
-                        sh "cat /root/.ssh/known_hosts"
                         // sh "rm -rf gitops-repo-cicd-course"
 
                         sh "eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L && \
@@ -213,8 +212,8 @@ pipeline {
 
                         // sh "cd gitops-repo-cicd-course && echo 'hello' >> .git/config"
 
-                        sh "git config user.email \"jenkins-bot@gmail.com\""
-                        sh "git config local user.name \"Jenkins Bot\""
+                        sh "git config --global user.email \"jenkins-bot@gmail.com\""
+                        sh "git config --global user.name \"Jenkins Bot\""
 
                         sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
                         sh "eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L && \
