@@ -161,7 +161,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'gitops'
+                branch 'gitops-test'
             }
 
             options {
