@@ -187,7 +187,7 @@ pipeline {
                             git clone $GITOPS_REPO"
 
                         sh "ls -l gitops-repo-cicd-course"
-                        sh "chmod -R 777 gitops-repo-cicd-course"
+                        // sh "chmod -R 777 gitops-repo-cicd-course"
                     }
 
                     script {
@@ -205,11 +205,16 @@ pipeline {
                         
                         // sh "mkdir $HOME/.git && touch $HOME/.git/config"
                         sh "pwd"
-                        sh "cd gitops-repo-cicd-course && ls -la"
+                        
+                        sh "ls -la $HOME"
+                        sh "ls -la /root
+                        "
                         sh "cd gitops-repo-cicd-course && ls -la .git"
+                        sh "cd gitops-repo-cicd-course && cat .git/config"
+                        sh "cd gitops-repo-cicd-course && echo 'hello' >> .git/config"
 
-                        sh "git config --local user.email \"jenkins-bot@gmail.com\""
-                        sh "git config --local user.name \"Jenkins Bot\""
+                        sh "git config user.email \"jenkins-bot@gmail.com\""
+                        sh "git config local user.name \"Jenkins Bot\""
 
                         sh "git commit -am \"updated app ${SERVICE_NAME} to version ${BUILD_NUMBER}\""
                         sh "eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L && \
