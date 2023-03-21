@@ -78,7 +78,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'gitops-test'
+                branch 'gitops'
             }
 
             steps {
@@ -110,7 +110,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'gitops-test'
+                branch 'gitops'
             }
 
             options {
@@ -147,7 +147,6 @@ pipeline {
                 kubernetes {
                     yamlFile 'pod-template-kikd.yaml'
                     cloud 'kubernetes'
-                    // workspaceVolume persistentVolumeClaimWorkspaceVolume(claimName: 'workspace', readOnly: false)
                 }
             } 
 
@@ -181,13 +180,11 @@ pipeline {
                         
                         sh "mkdir ~/.ssh && touch ~/.ssh/known_hosts"
                         sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
-                        // sh "rm -rf gitops-repo-cicd-course"
 
                         sh "eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L && \
                             git clone $GITOPS_REPO"
 
                         sh "ls -l gitops-repo-cicd-course"
-                        // sh "chmod -R 777 gitops-repo-cicd-course"
                     }
 
                     script {
@@ -195,17 +192,17 @@ pipeline {
                         def serviceName = jobName.split("/")[0]
                         env.SERVICE_NAME = serviceName
                     }
+
                     sh """
                         cd gitops-repo-cicd-course/apps-kustomize/dev/code-with-quarkus
                         cat deployment.yaml
                         yq -i '.spec.template.spec.containers[0].image = \"${CONTAINER_REG}/${GCP_PROJECT}/${SERVICE_NAME}:${BUILD_NUMBER}-gitops\"' deployment.yaml
                         cat deployment.yaml   
                     """
+
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                         
                         sh "pwd"
-                        
-                        // sh "mkdir $HOME/.git && touch $HOME/.git/config"
                         sh "mkdir /root/.git && touch /root/.git/config"
 
                         sh "git config --global user.email \"jenkins-bot@gmail.com\""
@@ -234,7 +231,7 @@ pipeline {
 
             when {
                 beforeAgent true
-                branch 'gitops-test'
+                branch 'gitops'
             }
 
             options {
