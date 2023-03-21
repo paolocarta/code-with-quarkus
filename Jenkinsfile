@@ -186,9 +186,8 @@ pipeline {
                         sh "eval \"\$(ssh-agent -s)\" && ssh-add $SSH_KEY && ssh-add -L && \
                             git clone $GITOPS_REPO"
 
-                        sh "ls -l"
                         sh "ls -l gitops-repo-cicd-course"
-                        sh "chmod -R 666 gitops-repo-cicd-course"
+                        sh "chmod -R 777 gitops-repo-cicd-course"
                     }
 
                     script {
@@ -208,7 +207,7 @@ pipeline {
                         sh "pwd"
                         sh "cd gitops-repo-cicd-course && ls -la"
                         sh "cd gitops-repo-cicd-course && ls -la .git"
-                        
+
                         sh "git config --local user.email \"jenkins-bot@gmail.com\""
                         sh "git config --local user.name \"Jenkins Bot\""
 
