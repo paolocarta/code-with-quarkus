@@ -139,6 +139,15 @@ pipeline {
 
                 }            
             }
+
+            post {
+                success {
+                    slackSend(channel: "test-notifications", message: "Pipeline created and pushed container successfully!", color: "good")
+                }
+                failure {
+                    slackSend(channel: "test-notifications", message: "Pipeline failed to build and push the container", color: "danger")
+                }                    
+            }
         }
 
         stage('Deploy') {
@@ -263,8 +272,14 @@ pipeline {
             //     // sh 'rm -rf /tmp/workspace/${SERVICE_NAME}'
             // }
 
-            // cleanWs()
-        }        
+            cleanWs()
+        } 
+        // success {
+        //     slackSend(channel: "<slack channel to message on success>", message: "Pipeline deployed successfully!", color: "good")
+        // }
+        // failure {
+        //     slackSend(channel: "<slack channel to message on failure>", message: "Pipeline failed to deploy.", color: "danger")
+        // }       
         
     }
 
